@@ -23,6 +23,6 @@ The exception was defined to be called in the *Game* constructor.
 ```
 "terminate called after throwing an instance of 'std::regex_error'" "throw_regex_error(regex_constants::error_brack);"
 ```
-You are using GCC with version less than 4.9.0, in which full support for C++11 <regex> was [added](https://isocpp.org/blog/2014/04/gcc-4.9.0). C++11 compiler support is required for this course. Consider upgrading. If you are on Ubuntu/Mint, here is a helpful [link](http://superuser.com/questions/772954/install-gcc-g-version-4-9-in-linux-mint).
+You are using GCC with version less than 4.9.0, in which full support for C++11 &lt;regex&gt; was [added](https://isocpp.org/blog/2014/04/gcc-4.9.0). C++11 compiler support is required for this course. Consider upgrading. If you are on Ubuntu/Mint, here is a helpful [link](http://superuser.com/questions/772954/install-gcc-g-version-4-9-in-linux-mint).
 
 #### 
