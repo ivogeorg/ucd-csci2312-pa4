@@ -8,6 +8,18 @@ The convention used in the game is the standard matrix convention:
 3. Positions are always defined as (row, col), so (x, y).
 4. A somewhat looser convention is to define a matrix (game board grid) as width by height (w x h).
 
+The code which you might consider buggy but which shows how these conventions interact is the following:
+```C++
+Game g(4, 5);
+
+pass = g.addSimple(0, 0);
+pass = pass && g.addStrategic(1, 1);
+pass = pass && g.addFood(0, 2);
+pass = pass && g.addFood(2, 1);
+pass = pass && g.addAdvantage(2, 2);
+pass = pass && g.addSimple(4, 3);
+```
+
 #### How will the smoketest generate InsufficientDimensionsEx with width=2?
 Notice the *static* constants 
 ```C++
