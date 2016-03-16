@@ -6,15 +6,17 @@ _inheritance, polymorphism, board games, randomization_
 
 ### Goals
 
-1. Create a simple board game with various types of pieces which move and interact in a two-dimensional grid.
-2. Learn to work with class hierarchies, including abstract and concrete classes, to define complex behavior.
-3. Learn to work with `virtual` functions and overriding to extend and specialize behavior while supporting polymorphism.
-4. Learn to implement and use a _functor_ to specify object behavior.
-5. Learn to use the `<random>` library to randomize object behavior.
-6. Learn to implement a `virtual` binary operator to implement object interaction.
-7. Implement of a fully functional C++ program in one go.
-8. Continue using git and Github.
-9. Develop good coding style.
+1. Get experience with inheritance, polymorphism, and class hierarchies in the domain of board turn-based strategic games.
+2. Enrich your pallette of C++ tools to define complex behavior:
+  1. Abstract and concrete classes for hierarchical behavior extension.
+  2. `virtual` functions and overriding to specialize behavior while supporting polymorphism.
+  3. _functors_ to specify dynamic object behavior.
+  4. The `<random>` library to randomize object behavior.
+  5. A `virtual` binary operator to implement object interaction.
+  6. STL classes for data management.
+3. Develop in _one go_ a small-scale semi-interactive game with bare-bones ASCII visualization.
+4. Continue using git and Github.
+5. Develop good coding style.
 
 ### Synopsis
 
