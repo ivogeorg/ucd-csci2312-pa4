@@ -18,5 +18,5 @@ _inheritance, polymorphism, board games, randomization_
 
 ### Synopsis
 
-![alt text](https://github.com/ivogeorg/ucd-csci2312-pa4/images/icon48.png "Piece class hierarchy")
+![alt text](https://github.com/ivogeorg/ucd-csci2312-pa4/blob/master/images/piece_hier.png "Piece class hierarchy")
 
