@@ -75,7 +75,7 @@ Two websites with C++ Reference, [here](http://en.cppreference.com/w/) and [here
 
 ### Detailed Instructions
 
-#### Overview
+#### I. Overview
 
 PA5 creates a simple board turn-based Game where `Piece`-s move around and interact. This is how a short run of the Game looks like in print:
 
@@ -117,4 +117,25 @@ Status: Over!
 ![alt text](https://github.com/ivogeorg/ucd-csci2312-pa4/blob/master/images/piece_hier.png "Piece class hierarchy")
 
 The dotted boxes represent abstract classes, the rest represent concrete classes. The codes in the grid above correspond to instantiations of the concrete classes, i.e. these are the code names/id-s of objects of type `Food` (e.d. `F333`), `Advantage` (e.g. `D456`), `Simple` (e.g. `S146`), and `Strategic` (e.g. `T987`). The game executes rounds, gives each piece which is still on the board a turn, and then it prints itself, letting the Piece-s fill in their code names in the appropriate positions.
+
+#### II. The grid, coordinates, and positions
+
+The **grid** is two-dimensional. It has a width and height. Each **position** has coordinates (x, y), with x indexing rows from top to bottom, and y indexing columns from left to right. Both x and y and 0-indexed. The following grid is a 4 x 5, i.e. width = 4 and height = 5, and so x runs from 0 to 4 and y runs from 0 to 3.
+
+
+(0,0) |	(0,1) |	(0,2) |	(0,3)
+(1,0) |	(1,1) |	(1,2) |	(1,3)
+(2,0)	| (2,1)	| (2,2)	| (2,3)
+(3,0)	| (3,1)	| (3,2)	| (3,3)
+(4,0)	| (4,1)	| (4,2)	| (4,3)
+
+Internally, the grid is represented as a vector of size 4 * 5 = 20. The indices correspond to grid positions as follows:
+
+0	1	2	3
+4	5	6	7
+8	9	10	11
+12	13	14	15
+16	17	18	19
+The Game uses both representations as they are good for different purposes. You have to come up with simple formulae to convert back and forth.
+
 
