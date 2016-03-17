@@ -75,5 +75,46 @@ Two websites with C++ Reference, [here](http://en.cppreference.com/w/) and [here
 
 ### Detailed Instructions
 
+#### Overview
+
+PA5 creates a simple board turn-based Game where `Piece`-s move around and interact. This is how a short run of the Game looks like in print:
+
+```
+Round 0
+[T998 ][T1000][F1001]
+[S999 ][     ][     ]
+[     ][     ][F1002]
+Status: Playing...
+Round 1
+[     ][     ][F1001]
+[     ][     ][     ]
+[S999 ][     ][F1002]
+Status: Playing...
+Round 2
+[     ][     ][F1001]
+[     ][     ][     ]
+[     ][S999 ][F1002]
+Status: Playing...
+Round 3
+[     ][     ][F1001]
+[     ][     ][     ]
+[     ][     ][S999 ]
+Status: Playing...
+Round 4
+[     ][     ][F1001]
+[     ][S999 ][     ]
+[     ][     ][     ]
+Status: Playing...
+Round 5
+[     ][     ][S999 ]
+[     ][     ][     ]
+[     ][     ][     ]
+Status: Over!
+```
+
+`Piece`-s are of different type and have polymorphic (i.e. different) behavior. The class hierarchy is as follows:
+
 ![alt text](https://github.com/ivogeorg/ucd-csci2312-pa4/blob/master/images/piece_hier.png "Piece class hierarchy")
+
+The dotted boxes represent abstract classes, the rest represent concrete classes. The codes in the grid above correspond to instantiations of the concrete classes, i.e. these are the code names/id-s of objects of type `Food` (e.d. `F333`), `Advantage` (e.g. `D456`), `Simple` (e.g. `S146`), and `Strategic` (e.g. `T987`). The game executes rounds, gives each piece which is still on the board a turn, and then it prints itself, letting the Piece-s fill in their code names in the appropriate positions.
 
