@@ -1,4 +1,4 @@
-## CSCI 2312: Programming Assignment 4
+## CSCI 2312: Programming Assignment 4 (IN PROGRESS)
 
 _inheritance, polymorphism, board games, randomization_
 
@@ -19,6 +19,10 @@ _inheritance, polymorphism, board games, randomization_
 5. Develop good coding style.
 
 ### Synopsis
+
+PA4 leaves the clustering domain and gives a glimpse of the game domain. While it is a chance to put any C++ features we have covered to new use, its main goal is to give a fertile setting for dynamic (run-time) polymorphism of user types. You will create a class hierarchy with a rich tapestry of polymorphic behavior. You have to write quite a few more files than usual, though most are small: `Exceptions.cpp`, `Piece.cpp`, `Agent.cpp`, `Simple.cpp`, `Strategic.cpp`, `Resource.cpp`, `Food.cpp`, `Advantage.cpp`, `Game.cpp`, `DefaultAgentStrategy.cpp`, and `AggressiveAgentStrategy.cpp`.
+
+This assignment may be smaller in terms of lines of code relative to the preceding ones but is not trivial. It might take just as much time as the others since it introduces new language features and has several points of algorithmic complexity.
 
 ![alt text](https://github.com/ivogeorg/ucd-csci2312-pa4/blob/master/images/piece_hier.png "Piece class hierarchy")
 
