@@ -132,13 +132,13 @@ The **grid** is two-dimensional. It has a width and height. Each **position** ha
 
 Internally, the grid is represented as a vector of size 4 * 5 = 20. The indices correspond to grid positions as follows:
 
-|||
---- |	--- |	--- |	---
-0 |	1 |	2 |	3
-4 |	5 |	6 |	7
-8	| 9	| 10 |	11
-12 |	13 |	14 |	15
-16	| 17	| 18	| 19
+|||||
+| --- |	--- |	--- | --- |
+| 0 |	1 |	2 |	3 |
+| 4 |	5 |	6 |	7 |
+| 8	| 9	| 10 |	11 |
+| 12 |	13 |	14 |	15 |
+| 16	| 17	| 18	| 19 |
 
 The `Game` uses both representations as they are good for different purposes. You have to come up with simple formulae to convert back and forth.
 
