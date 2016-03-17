@@ -163,3 +163,82 @@ Surroundings holds an array of length 9 and the indices correspond to the positi
 
 A `Surroundings` structure's array is filled with values of the enumerated type `PieceType`: `EMPTY`, `INACCESSIBLE` (i.e. outside the `Game` grid), `SIMPLE`, `STRATEGIC`, `FOOD`, `ADVANTAGE`, and `SELF`. `SELF` is always in the middle, at index **4**.
 
+#### III. Game play
+
+The behavior of `Piece`-s is based on **actions**, which are picked by each `Piece`'s strategy. Each `Piece` on the `Game` board gets a turn each `Game` round.
+
+##### 3.1 Action
+
+Available actions are captured in the enumerated class `ActionType`: `N`, `NE`, `NW`, `E`, `W`, `SE`, `SW`, `S`, and `STAY`. The compass directions correspond to the 8 directions a `Piece` can move in a grid from its current position. `STAY` means no motion, i.e. stay where you are. 
+
+`Resource`-s don't move so they always return `STAY`.
+
+`Agent`-s can move in all directions that are legal depending on the current state of the `Game`, or `STAY` in place.
+
+##### 3.2 Interaction
+
+As `Piece`-s move around the grid they run into others. Each time that happens there is an **interaction** taking place. This is captured by the pure `virtual operator*` (aka _interaction operator_) that `Piece`-s overload. The interactions are as follows:
+
+1. When an `Agent` moves onto a `Resource`, it consumes it completely.
+2. When an `Agent` moves onto another `Agent`, they compete and might either both die, or one dies and the other wins.
+
+##### 3.3 Strategies
+
+Picking an `ActionType` based on the `Surroundings` is captured in the `Strategy` class. The `Simple` agent doesn't have a separate `Strategy` object, while the `Strategic` agent has a dedicated `Strategy` object.
+
+The `Simple` agent's behavior/strategy is as follows:
+1. It does not challenge other agents (i.e. it doesn't move onto them).
+2. If there are adjacent Resource-s, returns a motion to one of them.
+3. If there aren’t adjacent Resource-s, returns a move to an adjacent empty position.
+4. If there aren't adjacent empty position, returns a STAY.
+
+The default `Strategic` agent's strategy (captured in a `DefaultAgentStrategy` object) is as follows:
+1. If there are adjacent Advantage-s, returns a motion to one of them. That is, it prefers Advantage to Food.
+2. lf there aren't adjacent Advantage-s, returns a move to an adjacent Food.
+3. If there arent' adjacent Food-s, return's a move to an adjacent empty position.
+4. If there aren't adjacent empty positions, it returns a move to an adjacent Simple agent (i.e. attacking it).
+5. If no adjacent Simple agents, returns STAY.
+
+The _aggressive_ `Strategic` agent's strategy (captured in an `AggressiveAgentStrategy` object) is as follows:
+1. If the Agent's energy >= aggressiveness threshold AND there are any adjacent Agent-s, challenge one of them.
+2. Else if adjacent Advantage-s, move onto an Advantage.
+3. Else if adjacent Food-s, move onto an Food.
+4. Else if adjacent empty positions, move onto an empty position.
+5. Else STAY.
+
+##### 3.4 Randomization
+
+Because in the above strategies there could be more than one of each kind of `Piece` types that are relevant to an `Agent`'s active behavior, an implemented functor class `PositionRandomizer` is provided in `Gaming.h`, and a `randomPosition` function in `Game` making use of it. Using this function reduces any bias in the motion of an `Agent` that might arise from the particular way it traverses its `Surroundings`. For example, if you were to always pick the first `Piece` of a particular type from the `Surroundings` to act upon, there would be an "upward" or "northward" bias of the motion of `Agent`-s since they traverse their `Surroundings` structure naturally from top to bottom and from left to right per the conventions mentioned in the previous section.
+
+The function `randomPosition` takes a `std::vector<int>` of positions (as indices in the `Surroundings` array) where you found one or another kind or `Piece` (one vector for each kind) and returns a random `Position` (as an (x, y) in the same `Surroundings` grid) for the `Agent` to move onto (in implementation of its `Strategy`).
+
+##### 3.5 Turns
+
+The `Game` gives each `Piece` on the grid a turn in a top-left row-wise bottom-right manner. A `Piece`'s turn consists of the following:
+
+1. The `Game` constructs the `Surroundings` of a `Piece`.
+2. The `Game` calls the polymorphic `takeTurn` on the `Piece`, which returns an `ActionType`.
+3. If the action is legal, the `Game` moves the `Piece` by calling `setPosition` on the `Piece`.
+4. If the new position is non-empty, the Game calls the _interaction_ `operator*` on the two `Piece`-s (i.e. `p1 * p2`), which polymorphically performs one of the two interactions described above.
+5. The `Game` checks if any of the two `Piece`-s have become unviable, by calling `isViable` on them, and removes the unviable ones from the board.
+
+##### 3.6 Rounds
+
+The `Game` is organized in a series of rounds. Each round effectively gives a turn to all the `Piece`-s which are still viable and on the `Game` grid. Though the `Game` is very simple, the `Game::round()` function is fairly complex due to all the little details that have to be taken care of. A round consists of the following steps:
+
+1. Go through all the `Piece`-s that are still viable and on the grid (this doesn't change between rounds) and:
+  1. If a `Piece` has not taken a turn, give it a turn. Use `Piece::getTurned()`.
+  2. Call the `Piece::setTurned(true)` to avoid giving a moving `Piece` more than one turn per round (e.g. if it happens to move to a grid position you haven't covered in the current round).
+  3. Perform the turn and implement all the consequences of the turn (e.g. interaction with another `Piece`).
+  4. Delete any `Piece`-s which interacted and, as a result, became unviable.
+2. Go through all the `Piece`-s that are still viable and on the grid after the current round, and:
+  1. Call the polymorphic `Piece::age()`.
+  2. Call the `Piece::setTurned(false)` to reset the turn for the next round.
+  3. Delete any `Piece`-s which have aged to zero.
+
+Some guidelines for implementing `Game::round()`:
+
+1. Do it incrementally and use the tests to build in more and more detail.
+2. It might be intuitive that you cycle through the `Game` grid for each round, but it is much better to cycle through a `std::set` of all the currently occupied positions of the grid. Cycling through the grid won't be able to handle some of the finer cases. Cycling through the `set`, if done correctly, will ensure a fair turn for all the `Pieces`.
+3. Notice that a `Piece` might become unviable before its turn comes (e.g. a `Resource` gets consumed by an `Agent` that moves ahead of it, or an `Agent` gets challenged by another, and one or both die as a result).
+4. Notice that a `Piece` might move to a new position, either through an interaction or through a move to a previously free position. In the first case, the position was already occupied, so it is still in the `set`. In the second case, the position was empty, so needs to be added to the `set`.
