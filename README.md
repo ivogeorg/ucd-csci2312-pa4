@@ -123,6 +123,7 @@ The dotted boxes represent abstract classes, the rest represent concrete classes
 The **grid** is two-dimensional. It has a width and height. Each **position** has coordinates (x, y), with x indexing rows from top to bottom, and y indexing columns from left to right. Both x and y and 0-indexed. The following grid is a 4 x 5, i.e. width = 4 and height = 5, and so x runs from 0 to 4 and y runs from 0 to 3.
 
 
+| --- |	--- |	--- |	--- |
 | (0,0) |	(0,1) |	(0,2) |	(0,3) |
 | (1,0) |	(1,1) |	(1,2) |	(1,3) |
 | (2,0)	| (2,1)	| (2,2)	| (2,3) |
