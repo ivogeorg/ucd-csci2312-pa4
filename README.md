@@ -245,3 +245,25 @@ Some guidelines for implementing `Game::round()`:
 2. It might be intuitive that you cycle through the `Game` grid for each round, but it is much better to cycle through a `std::set` of all the currently occupied positions of the grid. Cycling through the grid won't be able to handle some of the finer cases. Cycling through the `set`, if done correctly, will ensure a fair turn for all the `Pieces`.
 3. Notice that a `Piece` might become unviable before its turn comes (e.g. a `Resource` gets consumed by an `Agent` that moves ahead of it, or an `Agent` gets challenged by another, and one or both die as a result).
 4. Notice that a `Piece` might move to a new position, either through an interaction or through a move to a previously free position. In the first case, the position was already occupied, so it is still in the `set`. In the second case, the position was empty, so needs to be added to the `set`.
+
+#### IV. Game constants
+
+The following `static` constants have been used in the implementation of the game and are declared but not defined in the header files. You have to define them in the corresponding cpp files:
+
+```
+Advantage::ADVANTAGE_ID = 'D'
+Advantage::ADVANTAGE_MULT_FACTOR = 2.0
+Agent::AGENT_FATIGUE_RATE = 0.3
+AggressiveAgentStrategy::DEFAULT_AGGRESSION_THRESHOLD = Game::STARTING_AGENT_ENERGY * 0.75
+Food::FOOD_ID = 'F'
+Game::NUM_INIT_AGENT_FACTOR = 4
+Game::NUM_INIT_RESOURCE_FACTOR = 2
+Game::MIN_WIDTH = 3
+Game::MIN_HEIGHT = 3
+Game::STARTING_AGENT_ENERGY = 20
+Game::STARTING_RESOURCE_CAPACITY = 10
+Resource::RESOURCE_SPOIL_FACTOR = 1.2
+Simple::SIMPLE_ID = 'S'
+Strategic::STRATEGIC_ID = 'T' 
+```
+
