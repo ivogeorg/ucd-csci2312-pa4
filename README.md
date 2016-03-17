@@ -51,7 +51,7 @@ Your program should run on **GCC 4.9.0** or later, or **Clang 3.3** or later. No
 
 ### Due Date
 
-The assignment is due on **Wed, Mar 30, at 23:59 Mountain time**. No late work. The last commit to your PA3 repository before the deadline will be graded.
+The assignment is due on **Sun, Apr 17, at 23:59 Mountain time**. No late work. The last commit to your PA4 repository before the deadline will be graded.
 
 ### Honor Code
 
