@@ -67,7 +67,7 @@ Familiarize yourself with and start following [coding style guidelines](http://c
 
 ### References
 
-Operator overloading [guidelines](http://courses.cms.caltech.edu/cs11/material/cpp/donnie/cpp-ops.html).
+Operator overloading [guidelines](http://courses.cms.caltech.edu/cs11/material/cpp/donnie/cpp-ops.html). For the implementation of `virtual Piece &operator*(Piece &other)`, see this [example](https://github.com/ivogeorg/ucd-csci2312-pa4/blob/master/examples/virtual_operator.cpp).
 
 A very good [C++ tutorial](http://www.learncpp.com/), including many topics we are covering.
 
