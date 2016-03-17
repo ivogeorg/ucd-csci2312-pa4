@@ -187,12 +187,14 @@ As `Piece`-s move around the grid they run into others. Each time that happens t
 Picking an `ActionType` based on the `Surroundings` is captured in the `Strategy` class. The `Simple` agent doesn't have a separate `Strategy` object, while the `Strategic` agent has a dedicated `Strategy` object.
 
 The `Simple` agent's behavior/strategy is as follows:
+
 1. It does not challenge other agents (i.e. it doesn't move onto them).
 2. If there are adjacent Resource-s, returns a motion to one of them.
 3. If there aren’t adjacent Resource-s, returns a move to an adjacent empty position.
 4. If there aren't adjacent empty position, returns a STAY.
 
 The default `Strategic` agent's strategy (captured in a `DefaultAgentStrategy` object) is as follows:
+
 1. If there are adjacent Advantage-s, returns a motion to one of them. That is, it prefers Advantage to Food.
 2. lf there aren't adjacent Advantage-s, returns a move to an adjacent Food.
 3. If there arent' adjacent Food-s, return's a move to an adjacent empty position.
@@ -200,6 +202,7 @@ The default `Strategic` agent's strategy (captured in a `DefaultAgentStrategy` o
 5. If no adjacent Simple agents, returns STAY.
 
 The _aggressive_ `Strategic` agent's strategy (captured in an `AggressiveAgentStrategy` object) is as follows:
+
 1. If the Agent's energy >= aggressiveness threshold AND there are any adjacent Agent-s, challenge one of them.
 2. Else if adjacent Advantage-s, move onto an Advantage.
 3. Else if adjacent Food-s, move onto an Food.
