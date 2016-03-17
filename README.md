@@ -142,4 +142,24 @@ Internally, the grid is represented as a vector of size 4 * 5 = 20. The indices 
 
 The `Game` uses both representations as they are good for different purposes. You have to come up with simple formulae to convert back and forth.
 
+##### 2.1 Surroundings
+
+The behavior of the `Piece`-s is based on what's around them. The `Surroundings` structure is a **3 x 3 grid** which creates a map of the 8 positions which surround the current position of a `Piece`. The 8 positions have the following relation with the position (x, y) of the `Piece`:
+
+||||
+| --- | --- | --- |
+| (-1,-1) | (-1,0) | (-1,1) |
+| (0,-1) | (x,y) | (0,1) |
+| (1,-1) | (1,0) | (1,1) |
+ 
+
+Surroundings holds an array of length 9 and the indices correspond to the positions around a Piece as follows:
+
+||||
+| --- | --- | --- |
+| 0 | 1 | 2 |
+| 3 |	4	| 5 |
+| 6 |	7 | 8 |
+
+A `Surroundings` structure's array is filled with values of the enumerated type `PieceType`: `EMPTY`, `INACCESSIBLE` (i.e. outside the `Game` grid), `SIMPLE`, `STRATEGIC`, `FOOD`, `ADVANTAGE`, and `SELF`. `SELF` is always in the middle, at index **4**.
 
