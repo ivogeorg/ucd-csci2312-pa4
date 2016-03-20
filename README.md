@@ -292,17 +292,17 @@ Again, because the different elements of the `Game` are closely intertwined, it 
 
 #### VI. Classes
 
-##### 6.1 Game
+##### 6.1 `Game`
 
 The `Game`-related headers are: `Game.h`, and `Gaming.h`. You will need to write a `Game.cpp` file. `Gaming.h` contains declarations of enumeration classes, structures, and inline classes which are provided for you.
 
-##### 6.2 Pieces
+##### 6.2 `Piece`
 
 You have headers for all the `Piece` class hierarchy: `Piece.h`, `Agent.h`, `Resource.h`, `Simple.h`, `Strategic.h`, `Food.h`, and `Advantage.h`. Each will require the corresponding cpp file with implementation of the methods.
 
 In addition, you have the abstract class header (no cpp necessary) `Strategy.h`, and the headers for two concrete classes which extend the abstract class: `DefaultAgentStrategy.h`, and `AggressiveAgentStrategy.h`. You will need to write two corresponding cpp files to implement these classes.
 
-##### 6.3 Piece viability, energy, capacity, aging, finishing
+##### 6.3 `Piece` viability, energy, capacity, aging, finishing
 
 The `Game` creates `Agent`-s with `STARTING_AGENT_ENERGY` and `Resource`-s with `STARTING_RESOURCE_CAPACITY`.
 
@@ -312,7 +312,7 @@ The `Game` creates `Agent`-s with `STARTING_AGENT_ENERGY` and `Resource`-s with 
 
 `Piece::finish()` is called by any `Resource` which gets consumed or `Agent` which loses a challenge with another `Agent`. Specifically, it is called in the implementation of the double-dispatch `virtual` interaction operator `operator*()`. See next section for details on the operator. **TODO: Game rule. Need to remove from leaf classes.**
 
-##### 6.4 Interaction, energy, capacity, Food, and Advantage
+##### 6.4 Interaction, energy, capacity, `Food`, and `Advantage`
 
 Upon interaction between two `Piece`-s, energy/capacity is transferred as follows:
 
@@ -326,7 +326,7 @@ Upon interaction between two `Piece`-s, energy/capacity is transferred as follow
 
 For the implementation of the `Piece::operator*()`, take a look at [this](https://github.com/ivogeorg/ucd-csci2312-pa4/blob/master/examples/virtual_operator.cpp) page.
 
-##### 6.5 Game dynamics
+##### 6.5 `Game` dynamics
 
 A `Game` can be populated manually (default) or automatically. For automatic population, use the following numbers have been useful:
 
@@ -343,7 +343,7 @@ The `Game` is **over** when there are _no more `Resource`-s_ left on the grid.
 
 The default `Game::Game()` constructor creates a **3 x 3** grid.
 
-##### 6.5 Piece position randomization
+##### 6.5 `Piece` position randomization
 
 To randomize the positions of the Piece-s during automatic population, you can use code like this:
 
@@ -369,7 +369,7 @@ while (numStrategic > 0) {
 // Note: you can reuse the generator
 ```
 
-##### 6.6 RTTI & std::dynamic_cast
+##### 6.6 RTTI & `std::dynamic_cast`
 
 For the implementation of some functions, e.g. `Game::getNumSimple()`, you will need to know the runtime/dynamic derived type of an _upcast_ object (i.e. that is pointed to by a `Piece*` pointer). This is called _runtime type information (RTTI)_ and the following code illustrates the use of the C++ RTTI facility `std::dynamic_cast<>`:
 
@@ -391,7 +391,7 @@ unsigned int Game::getNumSimple() const {
 
 More on `dynamic_cast` in the [C++ Reference](http://en.cppreference.com/w/cpp/language/dynamic_cast).
 
-##### 6.7 std::set
+##### 6.7 `std::set`
 
 As mentioned above, `std::set` might be useful in the implementation of `Game::round()`. The following code contains a contrived example which you might find helpful:
 
