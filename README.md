@@ -267,3 +267,91 @@ Simple::SIMPLE_ID = 'S'
 Strategic::STRATEGIC_ID = 'T' 
 ```
 
+V. Files
+5.1 Build
+ The CMakeLists.txt contains a CMake list of all the required files for building PA5.
+
+5.2 Test suite
+The main.cpp, GamingTests.h, GamingTests.cpp, ErrorContext.h, and ErrorContext.cpp contain the test suite for PA5. There is nothing to change here except to comment out tests in main.cpp that you haven't reached as you implement incrementally.
+
+Here is the output of a sample run of the test suite:
+
+
+
+Notice that there are tests that generate exceptions and the exceptions are reported on std::cerr. Also notice that Game play tests can be declared verbose and print out the Game rounds. Finally, notice that, due to the randomization mentioned above, the three runs of the verbose Game play test are different (i.e. the course of the Game is different).
+
+Because the different elements of the Game are intertwined, it is recommended that you follow the following rough order of implementation and testing:
+
+Game smoke test.
+Game printing.
+Piece smoke test.
+Piece printing.
+Game populate.
+Surroundings smoke test.
+Action smoke test.
+Other Piece tests.
+Game play.
+5.3 Piece hierarchy
+You have headers for all the Piece class hierarchy: Piece.h, Agent.h, Resource.h, Simple.h, Strategic.h, Food.h, and Advantage.h. Each will require the corresponding cpp file with implementation of the methods.
+
+In addition, you have the abstract class header (no cpp necessary) Strategy.h, and the headers for two concrete classes which extend the abstract class: DefaultAgentStrategy.h, and AggressiveAgentStrategy.h. You will need to write two corresponding cpp files.
+
+5.4 Game
+The Game-related headers are: Game.h, and Gaming.h. You will need to write a Game.cpp file but Gaming.h contains enumeration class, structure, and inline class declarations which are all self-contained.
+
+VI. Implementation details
+This section contains further implementation details, code samples, and pointers on functionality.
+
+6.1 Viability, energy, capacity, aging, finishing
+The Game creates Agent-s with STARTING_AGENT_ENERGY and Resource-s with STARTING_RESOURCE_CAPACITY.
+
+Piece-s age every round. Notice that Piece::age() is pure virtual. Agent-s age by subtracting AGENT_FATIGUE_RATE from their energy, while Resource-s age by dividing their capacity by the RESOURCE_SPOIL_FACTOR.
+
+Piece-s are viable if they are not finished (Piece::isFinished()) AND their energy/capacity is greater than 0.0. Non-viable Piece-s are removed at the end of each Game round.
+
+Piece::finish() is called by any Resource which gets consumed or Agent which loses a challenge with another Agent. Specifically, it is called in the implementation of the double-dispatch virtual interaction operator operator*(). See next section for details on the operator.
+
+6.2 Interaction, energy, capacity, food, and advantage
+Upon interaction between two Piece-s, energy/capacity is transferred as follows:
+
+When two Agent-s interact, their energies are compared:
+If equal, both Agent-s call Piece::finish() and are taken out of the Game at the end of the round.
+If unequal, the Agent with the larger wins, the smaller energy is subtracted from its energy, and the losing Agent calls Piece::finish() and is taken out of the Game at the end of the round.
+When an Agent and a Resource interact, the Resource-s capacity is added to the Agent-s energy, the Resource calls Piece::finish() and is taken out of the Game at the end of the round. Notice that Resource::getCapacity is virtual and Advantage overrides it. The amount of capacity that is added to the Agent's energy is as follows:
+For Food, its capacity.
+For Advantage, its capacity * ADVANTAGE_MULT_FACTOR.
+For the implementation of the Piece::operator*, take a look at this page.
+
+6.3 Game dynamics
+A Game can be populated manually (default) or automatically. For automatic population, the following guidelines numbers have been useful:
+
+__numInitAgents = (__width * __height) / NUM_INIT_AGENT_FACTOR;
+__numInitResources = (__width * __height) / NUM_INIT_RESOURCE_FACTOR;
+unsigned int numStrategic = __numInitAgents / 2;
+unsigned int numSimple = __numInitAgents - numStrategic;
+unsigned int numAdvantages = __numInitResources / 4;
+unsigned int numFoods = __numInitResources - numAdvantages;
+The Game is over when there are no more Resource-s left on the grid.
+
+The default Game::Game() constructor creates a 3 x 3 grid.
+
+6.4 Randomization
+To randomize the positions of the Piece-s during automatic population, you can use code like this:
+
+
+
+6.5 RTTI & std::dynamic_cast
+For the implementation of some functions, e.g. Game::getNumSimple(), you will need to know the runtime/dynamic derived type of an object that is pointed to by a Piece* pointer. This is called runtime type information (RTTI) and the following code illustrates the use of the C++ RTTI facility std::dynamic_cast<>:
+
+
+
+More on dynamic_cast in the C++ Reference.
+
+6.6 std::set
+As mentioned above, std::set might be useful in the implementation of Game::round(). The following code contains a contrived example which you might find helpful:
+
+
+
+In particular, notice that std::set::insert() does not invalidate any iterators, and std::set::erase() only invalidates the iterator to the current element, returning an iterator to the next element. More on std::set in the C++ Reference.
+
+ 
