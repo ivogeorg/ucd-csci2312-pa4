@@ -345,7 +345,7 @@ The default `Game::Game()` constructor creates a **3 x 3** grid.
 
 ##### 6.5 Piece position randomization
 
-
+To randomize the positions of the Piece-s during automatic population, you can use code like this:
 
 ```C++
 // simple pseudo-random number generator
@@ -369,21 +369,84 @@ while (numStrategic > 0) {
 // Note: you can reuse the generator
 ```
 
+##### 6.6 RTTI & std::dynamic_cast
 
-To randomize the positions of the Piece-s during automatic population, you can use code like this:
+For the implementation of some functions, e.g. `Game::getNumSimple()`, you will need to know the runtime/dynamic derived type of an _upcast_ object (i.e. that is pointed to by a `Piece*` pointer). This is called _runtime type information (RTTI)_ and the following code illustrates the use of the C++ RTTI facility `std::dynamic_cast<>`:
 
+```C++
+// dynamic_cast returns a pointer of the argument type
+// or NULL if the derived type of the object is not of
+// the argument type
+unsigned int Game::getNumSimple() const {
+    unsigned int numAgents = 0;
 
+    for (auto it = __grid.begin(); it != __grid.end(); ++it) {
+        Agent *agent = dynamic_cast<Simple*>(*it);
+        if (agent) numAgents ++;
+    }
 
-6.5 RTTI & std::dynamic_cast
-For the implementation of some functions, e.g. Game::getNumSimple(), you will need to know the runtime/dynamic derived type of an object that is pointed to by a Piece* pointer. This is called runtime type information (RTTI) and the following code illustrates the use of the C++ RTTI facility std::dynamic_cast<>:
+    return numAgents;
+}
+```
 
+More on `dynamic_cast` in the [C++ Reference](http://en.cppreference.com/w/cpp/language/dynamic_cast).
 
+##### 6.7 std::set
 
-More on dynamic_cast in the C++ Reference.
+As mentioned above, `std::set` might be useful in the implementation of `Game::round()`. The following code contains a contrived example which you might find helpful:
 
-6.6 std::set
-As mentioned above, std::set might be useful in the implementation of Game::round(). The following code contains a contrived example which you might find helpful:
+```C++
+#include <iostream>
+#include <set>
 
+int main() {
+    std::set<int> iset;
+    iset.insert(1);
+    iset.insert(2);
+    iset.insert(3);
+    iset.insert(5);
+    iset.insert(6);
+    iset.insert(8);
 
+    for (auto it = iset.begin(); it != iset.end(); ) {
+        int elementToSearch = 6;
+        std::cout << "Iterating through " << *it << ".";
+        if (*it == 2) {
+            std::cout << " Inserting 0." << std::endl;
+            iset.insert(0);
+            ++it;
+        } else if (*it <= 3) {
+            std::cout << std::endl;
+            ++it;
+        } else {
+            std::cout << " Searching for " << elementToSearch << ". ";
+            auto search = iset.find(elementToSearch);
+            if (search != iset.end()) {
+                // Note: std::distance is the way to compare iterators but it requires bidirectional or random-access
+                // iterators to work in both directions (since they have to be mutually reachable by incrementing)
+                // these iterators are not implemented for std::set in the Standard Library, and implementing one
+                // is beyond the scope of this assignment, we resort to using the following hack to give us what we
+                // need.
+                int d = elementToSearch - *it;
+                std::cout << "Found " << elementToSearch << ". Distance from " << *it << " is " << d << ". Erasing." <<
+                std::endl;
+                if (d == 0) {
+                    it = iset.erase(search); // if erasing the current element, erase returns an iterator to the next
+                } else {
+                    iset.erase(search); // if erasing another element, we need to increment the iterator ourselves
+                    ++it;
+                }
+            } else {
+                std::cout << "No " << elementToSearch << " found." << std::endl;
+                ++it;
+            }
+        }
+    }
 
-In particular, notice that std::set::insert() does not invalidate any iterators, and std::set::erase() only invalidates the iterator to the current element, returning an iterator to the next element. More on std::set in the C++ Reference.
+    for (int i: iset) std::cout << i << std::endl;
+
+    return 0;
+}
+```
+
+In particular, notice that `std::set::insert()` does not invalidate any iterators, and `std::set::erase()` only invalidates the iterator to the current element, returning an iterator to the next element. More on `std::set` in the [C++ Reference](http://en.cppreference.com/w/cpp/container/set).
