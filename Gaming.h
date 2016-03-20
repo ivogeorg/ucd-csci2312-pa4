@@ -7,6 +7,7 @@
 
 #include <array>
 #include <random>
+#include "Exceptions.h"
 
 namespace Gaming {
 
@@ -36,15 +37,20 @@ namespace Gaming {
     class PositionRandomizer {
         std::default_random_engine __gen;
         std::uniform_int_distribution<int> *__dist[10];
+
     public:
         PositionRandomizer() {
             for (int i = 0; i < 10; i++)
                 __dist[i] = new std::uniform_int_distribution<int>(0, i);
         }
+
         ~PositionRandomizer() {
             for (int i = 0; i < 10; i++) delete __dist[i];
         }
-        const Position operator()(const std::vector<int> &positionIndices) { // TODO EmptyPosVectorEx
+
+        const Position operator()(const std::vector<int> &positionIndices) {
+            if (positionIndices.size() == 0) throw PosVectorEmptyEx();
+
             int posIndex = (*__dist[positionIndices.size() - 1])(__gen);
             return Position(
                     (unsigned) (positionIndices[posIndex] / 3),

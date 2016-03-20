@@ -60,19 +60,22 @@ namespace Gaming {
         unsigned int getNumAgents() const;
         unsigned int getNumSimple() const;
         unsigned int getNumStrategic() const;
-        unsigned int getNumResources();
+        unsigned int getNumResources() const;
         Status getStatus() const { return __status; }
         unsigned int getRound() const { return __round; }
+        const Piece *getPiece(unsigned int x, unsigned int y) const;
 
         // grid population methods
-        bool addSimple(const Position &position);
-        bool addSimple(unsigned x, unsigned y);
-        bool addStrategic(const Position &position, Strategy *s = new DefaultAgentStrategy());
-        bool addStrategic(unsigned x, unsigned y, Strategy *s = new DefaultAgentStrategy());
-        bool addFood(const Position &position);
-        bool addFood(unsigned x, unsigned y);
-        bool addAdvantage(const Position &position);
-        bool addAdvantage(unsigned x, unsigned y);
+        void addSimple(const Position &position);
+        void addSimple(const Position &position, double energy); // used for testing only
+        void addSimple(unsigned x, unsigned y);
+        void addSimple(unsigned x, unsigned y, double energy);
+        void addStrategic(const Position &position, Strategy *s = new DefaultAgentStrategy());
+        void addStrategic(unsigned x, unsigned y, Strategy *s = new DefaultAgentStrategy());
+        void addFood(const Position &position);
+        void addFood(unsigned x, unsigned y);
+        void addAdvantage(const Position &position);
+        void addAdvantage(unsigned x, unsigned y);
         const Surroundings getSurroundings(const Position &pos) const;
 
         // gameplay methods

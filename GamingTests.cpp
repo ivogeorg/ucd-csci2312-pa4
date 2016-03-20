@@ -942,16 +942,15 @@ void test_game_populate(ErrorContext &ec, unsigned int numRuns) {
         {
             Game g;
 
-            pass = g.addSimple(0, 0);
-            pass = pass && g.addStrategic(1, 1);
-            pass = pass && g.addFood(0, 2);
-            pass = pass && g.addFood(2, 1);
-            pass = pass && g.addAdvantage(2, 2);
+            g.addSimple(0, 0);
+            g.addStrategic(1, 1);
+            g.addFood(0, 2);
+            g.addFood(2, 1);
+            g.addAdvantage(2, 2);
 
-            pass = pass = pass &&
-                    (g.getNumPieces() == 5) &&
-                    (g.getNumAgents() == 2) &&
-                    (g.getNumResources() == 3);
+            pass = (g.getNumPieces() == 5) &&
+                   (g.getNumAgents() == 2) &&
+                   (g.getNumResources() == 3);
 
             ec.result(pass);
         }
@@ -961,16 +960,28 @@ void test_game_populate(ErrorContext &ec, unsigned int numRuns) {
         {
             Game g(4, 5);
 
-            pass = g.addSimple(0, 0);
-            pass = pass && g.addStrategic(1, 1);
-            pass = pass && g.addFood(0, 2);
-            pass = pass && g.addFood(2, 1);
-            pass = pass && g.addAdvantage(2, 2);
-            pass = pass && g.addSimple(4, 3);
-            pass = pass && g.addAdvantage(2, 3);
+            g.addSimple(0, 0);
+            g.addStrategic(1, 1);
+            g.addFood(0, 2);
+            g.addFood(2, 1);
+            g.addAdvantage(2, 2);
+            g.addSimple(4, 3);
+            g.addAdvantage(2, 3);
 
-            pass = pass && (! g.addFood(4, 3));
-            pass = pass && (! g.addStrategic(0, 2));
+            try {
+                g.addFood(4, 3);
+                pass = false;
+            } catch (PositionNonemptyEx &ex) {
+                std::cerr << "Exception generated: " << ex << std::endl;
+                pass = (ex.getName() == "PositionNonemptyEx");
+            }
+            try {
+                g.addStrategic(0, 2);
+                pass = false;
+            } catch (PositionNonemptyEx &ex) {
+                std::cerr << "Exception generated: " << ex << std::endl;
+                pass = (ex.getName() == "PositionNonemptyEx");
+            }
 
             pass = pass &&
                           (g.getNumPieces() == 7) &&
@@ -985,12 +996,12 @@ void test_game_populate(ErrorContext &ec, unsigned int numRuns) {
         {
             Game g(4, 5);
 
-            pass = g.addSimple(0, 0);
-            pass = pass && g.addStrategic(1, 1);
-            pass = pass && g.addFood(0, 2);
+            g.addSimple(0, 0);
+            g.addStrategic(1, 1);
+            g.addFood(0, 2);
 
             try {
-                pass = pass && g.addAdvantage(4, 5);
+                g.addAdvantage(4, 5);
                 pass = false;
             } catch (OutOfBoundsEx &ex) {
                 std::cerr << "Exception generated: " << ex << std::endl;
@@ -999,7 +1010,7 @@ void test_game_populate(ErrorContext &ec, unsigned int numRuns) {
 
             try {
                 Position pos(6, 10);
-                pass = pass && g.addStrategic(pos);
+                g.addStrategic(pos);
                 pass = false;
             } catch (OutOfBoundsEx &ex) {
                 std::cerr << "Exception generated: " << ex << std::endl;
@@ -1037,15 +1048,221 @@ void test_game_populate(ErrorContext &ec, unsigned int numRuns) {
             Game g(9, 9, false);
 
             pass = (g.getNumAgents() == 20) &&
-                   (g.getNumResources() == 40); // TODO sometimes this is 39
+                   (g.getNumResources() == 40);
 
             if (! pass) std::cout << g.getNumAgents() << ' '
-                << g.getNumResources() << ' ';
+                << g.getNumResources() << ' ' << std::endl << g << ' ';
 
             ec.result(pass);
         }
     }
 }
+
+// Getting a Piece by position
+void test_game_getpiece(ErrorContext &ec, unsigned int numRuns){
+    bool pass;
+
+    // Run at least once!!
+    assert(numRuns > 0);
+
+    ec.DESC("--- Test - Game - Get piece ---"); // note: piece smoke test needed first
+
+    for (int run = 0; run < numRuns; run ++) {
+        ec.DESC("3x3 grid, manual population");
+
+        {
+            Game g;
+
+            g.addSimple(0, 0);
+            g.addStrategic(1, 1);
+            g.addFood(0, 2);
+            g.addFood(2, 1);
+            g.addAdvantage(2, 2);
+
+            pass = g.getPiece(0, 0)->getType() == PieceType::SIMPLE
+                   && g.getPiece(1, 1)->getType() == PieceType::STRATEGIC
+                   && g.getPiece(0, 2)->getType() == PieceType::FOOD
+                   && g.getPiece(2, 1)->getType() == PieceType::FOOD
+                   && g.getPiece(2, 2)->getType() == PieceType::ADVANTAGE
+                    ;
+
+            ec.result(pass);
+        }
+
+        ec.DESC("4x5 grid, manual population");
+
+        {
+            Game g(4, 5);
+
+            g.addSimple(0, 0);
+            g.addStrategic(1, 1);
+            g.addFood(0, 2);
+            g.addFood(2, 1);
+            g.addAdvantage(2, 2);
+            g.addSimple(4, 3);
+            g.addAdvantage(2, 3);
+
+            try {
+                g.addFood(4, 3);
+                pass = false;
+            } catch (PositionNonemptyEx &ex) {
+                std::cerr << "Exception generated: " << ex << std::endl;
+                pass = (ex.getName() == "PositionNonemptyEx");
+            }
+            try {
+                g.addStrategic(0, 2);
+                pass = false;
+            } catch (PositionNonemptyEx &ex) {
+                std::cerr << "Exception generated: " << ex << std::endl;
+                pass = (ex.getName() == "PositionNonemptyEx");
+            }
+
+            pass = pass &&
+                   g.getPiece(0, 0)->getType() == PieceType::SIMPLE
+                   && g.getPiece(1, 1)->getType() == PieceType::STRATEGIC
+                   && g.getPiece(0, 2)->getType() == PieceType::FOOD
+                   && g.getPiece(2, 1)->getType() == PieceType::FOOD
+                   && g.getPiece(2, 2)->getType() == PieceType::ADVANTAGE
+                   && g.getPiece(4, 3)->getType() == PieceType::SIMPLE
+                   && g.getPiece(2, 3)->getType() == PieceType::ADVANTAGE
+                    ;
+
+            ec.result(pass);
+        }
+
+        ec.DESC("4x5 grid, manual, out of bounds (exception generated)");
+
+        {
+            Game g(4, 5);
+
+            g.addSimple(0, 0);
+            g.addStrategic(1, 1);
+            g.addFood(0, 2);
+
+            try {
+                g.addAdvantage(4, 5);
+                pass = false;
+            } catch (OutOfBoundsEx &ex) {
+                std::cerr << "Exception generated: " << ex << std::endl;
+                pass = pass && (ex.getName() == "OutOfBoundsEx");
+            }
+
+            try {
+                Position pos(6, 10);
+                g.addStrategic(pos);
+                pass = false;
+            } catch (OutOfBoundsEx &ex) {
+                std::cerr << "Exception generated: " << ex << std::endl;
+                pass = pass && (ex.getName() == "OutOfBoundsEx");
+            }
+
+            pass = pass
+                   && g.getPiece(0, 0)->getType() == PieceType::SIMPLE
+                   && g.getPiece(1, 1)->getType() == PieceType::STRATEGIC
+                   && g.getPiece(0, 2)->getType() == PieceType::FOOD
+                    ;
+
+            ec.result(pass);
+        }
+
+        ec.DESC("3x3 grid, auto population");
+
+        {
+            Game g(3, 3, false);
+
+            unsigned numAgents = 0, numResources = 0;
+            for (int i = 0; i < 3; ++i)
+                for (int j = 0; j < 3; ++j)
+                    try {
+                        const Piece *piece = g.getPiece(i, j);
+                        switch (piece->getType()) {
+                            case PieceType::SIMPLE:
+                            case PieceType::STRATEGIC:
+                                ++numAgents;
+                                break;
+                            case PieceType::FOOD:
+                            case PieceType::ADVANTAGE:
+                                ++numResources;
+                                break;
+                            default:
+                                break;
+                        }
+                    } catch (PositionEmptyEx &ex) {
+                        continue;
+                    }
+
+            pass = (g.getNumAgents() == numAgents) &&
+                   (g.getNumResources() == numResources);
+
+            ec.result(pass);
+        }
+
+        ec.DESC("4x5 grid, auto population");
+
+        {
+            Game g(4, 5, false);
+
+            unsigned numAgents = 0, numResources = 0;
+            for (int i = 0; i < 5; ++i)
+                for (int j = 0; j < 4; ++j)
+                    try {
+                        const Piece *piece = g.getPiece(i, j);
+                        switch (piece->getType()) {
+                            case PieceType::SIMPLE:
+                            case PieceType::STRATEGIC:
+                                ++numAgents;
+                                break;
+                            case PieceType::FOOD:
+                            case PieceType::ADVANTAGE:
+                                ++numResources;
+                                break;
+                            default:
+                                break;
+                        }
+                    } catch (PositionEmptyEx &ex) {
+                        continue;
+                    }
+
+            pass = (g.getNumAgents() == numAgents) &&
+                   (g.getNumResources() == numResources);
+
+            ec.result(pass);
+        }
+
+        ec.DESC("9x9 grid, auto population");
+
+        {
+            Game g(9, 9, false);
+
+            unsigned numAgents = 0, numResources = 0;
+            for (int i = 0; i < 9; ++i)
+                for (int j = 0; j < 9; ++j)
+                    try {
+                        const Piece *piece = g.getPiece(i, j);
+                        switch (piece->getType()) {
+                            case PieceType::SIMPLE:
+                            case PieceType::STRATEGIC:
+                                ++numAgents;
+                                break;
+                            case PieceType::FOOD:
+                            case PieceType::ADVANTAGE:
+                                ++numResources;
+                                break;
+                            default:
+                                break;
+                        }
+                    } catch (PositionEmptyEx &ex) {
+                        continue;
+                    }
+
+            pass = (g.getNumAgents() == numAgents) &&
+                   (g.getNumResources() == numResources);
+
+            ec.result(pass);
+        }
+    }
+}
+
 
 // Printing of a game
 void test_game_print(ErrorContext &ec, unsigned int numRuns) {
@@ -1119,6 +1336,105 @@ void test_game_print(ErrorContext &ec, unsigned int numRuns) {
 
             ec.result(pass);
         }
+    }
+}
+
+// Randomization of motion
+void test_game_randomization(ErrorContext &ec, unsigned int numRuns) {
+    bool pass;
+
+    // Run at least once!!
+    assert(numRuns > 0);
+
+    ec.DESC("--- Test - Game - Randomization ---");
+
+    for (int run = 0; run < numRuns; run++) {
+
+        ec.DESC("position randomizer");
+
+        {
+            std::vector<int> positions;
+            for (int i = 0; i < 4; i++) positions.push_back(i);
+            for (int i = 5; i < 9; i++) positions.push_back(i);
+            Position pos;
+            unsigned counts[9];
+            for (auto &c : counts) c = 0;
+            for (int i = 0; i < 1000; i++) {
+                pos = Game::randomPosition(positions);
+                ++ counts[pos.x * 3 + pos.y];
+            }
+
+            pass = counts[0] > 100 &&
+                    counts[1] > 100 &&
+                    counts[2] > 100 &&
+                    counts[3] > 100 &&
+                    counts[4] == 0 &&
+                    counts[5] > 100 &&
+                    counts[6] > 100 &&
+                    counts[7] > 100 &&
+                    counts[8] > 100;
+
+            if (! pass) for (auto c : counts) std::cout << c << ' ';
+
+
+            ec.result(pass);
+        }
+
+        ec.DESC("position randomizer, empty vector (exception generated)");
+
+        {
+            std::vector<int> positions;
+
+            try {
+                Position pos = Game::randomPosition(positions);
+                pass = false;
+            } catch (PosVectorEmptyEx &ex) {
+                std::cerr << "Exception generated: " << ex << std::endl;
+                pass = (ex.getName() == "PosVectorEmptyEx");
+            }
+
+            ec.result(pass);
+        }
+
+        ec.DESC("random walk of a Simple agent");
+
+        {
+            Game g(101, 101);
+            Position pos(50, 50);
+            g.addSimple(Position(pos), 1000 * Game::STARTING_AGENT_ENERGY);
+            const Piece *piece = g.getPiece(pos.x, pos.y);
+
+            unsigned actionCounts[ActionType::STAY + 1];
+            for (auto &a : actionCounts) a = 0;
+            Position oldPos = pos;
+            for (int i = 0; i < 1000; i ++) {
+                g.round();
+                pos = piece->getPosition();
+                assert(pos.x != oldPos.x || pos.y != oldPos.y);
+                assert(piece->isViable());
+                ActionType actionType = g.reachSurroundings(oldPos, pos);
+                ++ actionCounts[actionType];
+                oldPos = pos;
+            }
+
+            pass = actionCounts[ActionType::NE] > 100 &&
+                    actionCounts[ActionType::NW] > 100 &&
+                    actionCounts[ActionType::N] > 100 &&
+                    actionCounts[ActionType::W] > 100 &&
+                    actionCounts[ActionType::E] > 100 &&
+                    actionCounts[ActionType::SW] > 100 &&
+                    actionCounts[ActionType::SE] > 100 &&
+                    actionCounts[ActionType::S] > 100 &&
+                    actionCounts[ActionType::STAY] == 0;
+
+            if (! pass) {
+                std::cout << std::endl;
+                for (auto c : actionCounts) std::cout << c << ' ';
+            }
+
+            ec.result(pass);
+        }
+
     }
 }
 

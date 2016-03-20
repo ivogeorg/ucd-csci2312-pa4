@@ -44,6 +44,38 @@ namespace Gaming {
         OutOfBoundsEx(unsigned maxWidth, unsigned maxHeight, unsigned width, unsigned height);
     };
 
+    class PositionEx : public GamingException {
+    private:
+        unsigned int __x, __y;
+
+    protected:
+        void __print_args(std::ostream &os) const override;
+
+    public:
+        PositionEx(unsigned x, unsigned y);
+    };
+
+    // to use in population methods
+    class PositionNonemptyEx : public PositionEx {
+    public:
+        PositionNonemptyEx(unsigned x, unsigned y);
+    };
+
+    // to use in Game Piece getter
+    class PositionEmptyEx : public PositionEx {
+    public:
+        PositionEmptyEx(unsigned x, unsigned y);
+    };
+
+    // to use with position randomizer
+    class PosVectorEmptyEx : public GamingException {
+    protected:
+        void __print_args(std::ostream &os) const override;
+
+    public:
+        PosVectorEmptyEx();
+    };
+
 }
 
 

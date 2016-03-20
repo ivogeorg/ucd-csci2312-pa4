@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.3)
-project(pa5game)
+project(ucd-csci2312-pa4)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
@@ -18,4 +18,4 @@ set(SOURCE_FILES main.cpp
         Strategy.h
         DefaultAgentStrategy.cpp DefaultAgentStrategy.h
         Gaming.h AggressiveAgentStrategy.cpp AggressiveAgentStrategy.h)
-add_executable(pa5game ${SOURCE_FILES})
+add_executable(ucd-csci2312-pa4 ${SOURCE_FILES})

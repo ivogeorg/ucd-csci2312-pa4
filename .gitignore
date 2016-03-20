@@ -1,3 +1,4 @@
+### C++ template
 # Compiled Object files
 *.slo
 *.lo
@@ -26,3 +27,8 @@
 *.exe
 *.out
 *.app
+
+# Clion project files
+.idea
+
+# Created by .ignore support plugin (hsz.mobi)
