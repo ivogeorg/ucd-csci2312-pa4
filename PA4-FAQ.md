@@ -1,4 +1,4 @@
-## PA5 FAQ
+## PA4 FAQ
 
 #### Relationship between position *(x, y)* and game board grid *width x height*. Also, isn't there an out-of-bounds bug in one of the tests?
 The convention used in the game is the standard matrix convention: 
