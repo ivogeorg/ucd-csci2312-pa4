@@ -322,7 +322,7 @@ Upon interaction between two `Piece`-s, energy/capacity is transferred as follow
 
 2. When an Agent and a Resource interact, the Resource-s capacity is added to the Agent-s energy, the Resource calls Piece::finish() and is taken out of the Game at the end of the round. Notice that Resource::getCapacity is virtual and Advantage overrides it. The amount of capacity that is added to the Agent's energy is as follows:
   1. For Food, its capacity.  
-  2. For Advantage, its capacity * ADVANTAGE_MULT_FACTOR.
+  2. For Advantage, its capacity * `ADVANTAGE_MULT_FACTOR`.
 
 For the implementation of the `Piece::operator*()`, take a look at [this](https://github.com/ivogeorg/ucd-csci2312-pa4/blob/master/examples/virtual_operator.cpp) page.
 
