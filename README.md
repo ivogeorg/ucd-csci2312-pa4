@@ -292,51 +292,84 @@ Again, because the different elements of the `Game` are closely intertwined, it 
 
 #### VI. Classes
 
-5.3 Piece hierarchy
-You have headers for all the Piece class hierarchy: Piece.h, Agent.h, Resource.h, Simple.h, Strategic.h, Food.h, and Advantage.h. Each will require the corresponding cpp file with implementation of the methods.
+##### 6.1 Game
 
-In addition, you have the abstract class header (no cpp necessary) Strategy.h, and the headers for two concrete classes which extend the abstract class: DefaultAgentStrategy.h, and AggressiveAgentStrategy.h. You will need to write two corresponding cpp files.
+The `Game`-related headers are: `Game.h`, and `Gaming.h`. You will need to write a `Game.cpp` file. `Gaming.h` contains declarations of enumeration classes, structures, and inline classes which are provided for you.
 
-5.4 Game
-The Game-related headers are: Game.h, and Gaming.h. You will need to write a Game.cpp file but Gaming.h contains enumeration class, structure, and inline class declarations which are all self-contained.
+##### 6.2 Pieces
 
-VI. Implementation details
-This section contains further implementation details, code samples, and pointers on functionality.
+You have headers for all the `Piece` class hierarchy: `Piece.h`, `Agent.h`, `Resource.h`, `Simple.h`, `Strategic.h`, `Food.h`, and `Advantage.h`. Each will require the corresponding cpp file with implementation of the methods.
 
-6.1 Viability, energy, capacity, aging, finishing
-The Game creates Agent-s with STARTING_AGENT_ENERGY and Resource-s with STARTING_RESOURCE_CAPACITY.
+In addition, you have the abstract class header (no cpp necessary) `Strategy.h`, and the headers for two concrete classes which extend the abstract class: `DefaultAgentStrategy.h`, and `AggressiveAgentStrategy.h`. You will need to write two corresponding cpp files to implement these classes.
 
-Piece-s age every round. Notice that Piece::age() is pure virtual. Agent-s age by subtracting AGENT_FATIGUE_RATE from their energy, while Resource-s age by dividing their capacity by the RESOURCE_SPOIL_FACTOR.
+##### 6.3 Piece viability, energy, capacity, aging, finishing
 
-Piece-s are viable if they are not finished (Piece::isFinished()) AND their energy/capacity is greater than 0.0. Non-viable Piece-s are removed at the end of each Game round.
+The `Game` creates `Agent`-s with `STARTING_AGENT_ENERGY` and `Resource`-s with `STARTING_RESOURCE_CAPACITY`.
 
-Piece::finish() is called by any Resource which gets consumed or Agent which loses a challenge with another Agent. Specifically, it is called in the implementation of the double-dispatch virtual interaction operator operator*(). See next section for details on the operator.
+`Piece`-s age every round. Notice that `Piece::age()` is pure `virtual`. `Agent`-s age by _subtracting_ `AGENT_FATIGUE_RATE` from their energy, while `Resource`-s age by _dividing_ their capacity by the `RESOURCE_SPOIL_FACTOR`.
 
-6.2 Interaction, energy, capacity, food, and advantage
-Upon interaction between two Piece-s, energy/capacity is transferred as follows:
+`Piece`-s are _viable_ while they are _**not** finished_ (`Piece::isFinished()`) AND their energy/capacity is _greater than 0.0_. Non-viable `Piec`e-s are removed at the end of each `Game` round.
 
-When two Agent-s interact, their energies are compared:
-If equal, both Agent-s call Piece::finish() and are taken out of the Game at the end of the round.
-If unequal, the Agent with the larger wins, the smaller energy is subtracted from its energy, and the losing Agent calls Piece::finish() and is taken out of the Game at the end of the round.
-When an Agent and a Resource interact, the Resource-s capacity is added to the Agent-s energy, the Resource calls Piece::finish() and is taken out of the Game at the end of the round. Notice that Resource::getCapacity is virtual and Advantage overrides it. The amount of capacity that is added to the Agent's energy is as follows:
-For Food, its capacity.
-For Advantage, its capacity * ADVANTAGE_MULT_FACTOR.
-For the implementation of the Piece::operator*, take a look at this page.
+`Piece::finish()` is called by any `Resource` which gets consumed or `Agent` which loses a challenge with another `Agent`. Specifically, it is called in the implementation of the double-dispatch `virtual` interaction operator `operator*()`. See next section for details on the operator. **TODO: Game rule. Need to remove from leaf classes.**
 
-6.3 Game dynamics
-A Game can be populated manually (default) or automatically. For automatic population, the following guidelines numbers have been useful:
+##### 6.4 Interaction, energy, capacity, Food, and Advantage
 
+Upon interaction between two `Piece`-s, energy/capacity is transferred as follows:
+
+1. When two Agent-s interact, their energies are compared:
+  1. If equal, both Agent-s call Piece::finish() and are taken out of the Game at the end of the round.  
+  2. If unequal, the Agent with the larger wins, the smaller energy is subtracted from its energy, and the losing Agent calls Piece::finish() and is taken out of the Game at the end of the round.
+
+2. When an Agent and a Resource interact, the Resource-s capacity is added to the Agent-s energy, the Resource calls Piece::finish() and is taken out of the Game at the end of the round. Notice that Resource::getCapacity is virtual and Advantage overrides it. The amount of capacity that is added to the Agent's energy is as follows:
+  1. For Food, its capacity.  
+  2. For Advantage, its capacity * ADVANTAGE_MULT_FACTOR.
+
+For the implementation of the `Piece::operator*()`, take a look at [this](https://github.com/ivogeorg/ucd-csci2312-pa4/blob/master/examples/virtual_operator.cpp) page.
+
+##### 6.5 Game dynamics
+
+A `Game` can be populated manually (default) or automatically. For automatic population, use the following numbers have been useful:
+
+```
 __numInitAgents = (__width * __height) / NUM_INIT_AGENT_FACTOR;
 __numInitResources = (__width * __height) / NUM_INIT_RESOURCE_FACTOR;
 unsigned int numStrategic = __numInitAgents / 2;
 unsigned int numSimple = __numInitAgents - numStrategic;
 unsigned int numAdvantages = __numInitResources / 4;
 unsigned int numFoods = __numInitResources - numAdvantages;
-The Game is over when there are no more Resource-s left on the grid.
+```
 
-The default Game::Game() constructor creates a 3 x 3 grid.
+The `Game` is **over** when there are _no more `Resource`-s_ left on the grid.
 
-6.4 Randomization
+The default `Game::Game()` constructor creates a **3 x 3** grid.
+
+##### 6.5 Piece position randomization
+
+
+
+```C++
+// simple pseudo-random number generator
+// sufficient for our casual purposes
+std::default_random_engine gen;
+std::uniform_int_distribution<int> d(0, __width * __height);
+
+// populate Strategic agents
+while (numStrategic > 0) {
+    int i = d(gen); // random index in the grid vector
+    if (__grid[i] == nullptr) { // is position empty
+        Position pos(i / __width, i % __width);
+        __grid[i] = new Strategic(*this, pos, Game::STARTING_AGENT_ENERGY);
+        numStrategic --;
+    }
+}
+
+// populate Simple agents
+// ...
+
+// Note: you can reuse the generator
+```
+
+
 To randomize the positions of the Piece-s during automatic population, you can use code like this:
 
 
