@@ -310,7 +310,7 @@ The `Game` creates `Agent`-s with `STARTING_AGENT_ENERGY` and `Resource`-s with 
 
 `Piece`-s are _viable_ while they are _**not** finished_ (`Piece::isFinished()`) AND their energy/capacity is _greater than 0.0_. Non-viable `Piec`e-s are removed at the end of each `Game` round.
 
-`Piece::finish()` is called by any `Resource` which gets consumed or `Agent` which loses a challenge with another `Agent`. Specifically, it is called in the implementation of the double-dispatch `virtual` interaction operator `operator*()`. See next section for details on the operator. **TODO: Game rule. Need to remove from leaf classes.**
+`Piece::finish()` is called by any `Resource` which gets consumed or `Agent` which loses a challenge with another `Agent`. Specifically, it is called in the implementation of the double-dispatch `virtual` interaction operator `operator*()`. See next section for details on the operator.
 
 ##### 6.4 Interaction, energy, capacity, `Food`, and `Advantage`
 
@@ -450,3 +450,11 @@ int main() {
 ```
 
 In particular, notice that `std::set::insert()` does not invalidate any iterators, and `std::set::erase()` only invalidates the iterator to the current element, returning an iterator to the next element. More on `std::set` in the [C++ Reference](http://en.cppreference.com/w/cpp/container/set).
+
+* * * 
+
+#### VII. TODO
+
+_This section concerns future revisions of this assignment._
+
+1. (Section [6.3]) `Piece::finish()` is called by any `Resource` which gets consumed or `Agent` which loses a challenge with another `Agent`. Specifically, it is called in the implementation of the double-dispatch `virtual` interaction operator `operator*()`. See next section for details on the operator. **TODO: This is a game rule, and therefore should be _pulled up_ to the abstract classes. The leaf classes should not be relied upon to implement the game rules faithfully. This will open the possibility for an open implementation of leaf classes by students and team tournaments.**
