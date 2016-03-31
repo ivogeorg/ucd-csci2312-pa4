@@ -1,4 +1,4 @@
-## CSCI 2312: Programming Assignment 4   \<\<IN PROGRESS\>\>
+## CSCI 2312: Programming Assignment 4
 
 _inheritance, polymorphism, board games, randomization_
 
