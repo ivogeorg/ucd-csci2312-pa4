@@ -339,7 +339,7 @@ unsigned int numAdvantages = __numInitResources / 4;
 unsigned int numFoods = __numInitResources - numAdvantages;
 ```
 
-The `Game` is **over** when there are _no more `Resource`-s_ left on the grid.
+The `Game` is **over** when there are _no more `Resource`-s_ left on the grid. Note that this includes the rare case when `Agent`-s are taken off the board before all `Resource`-s have been consumed. The latter will age and disappear on their own.
 
 The default `Game::Game()` constructor creates a **3 x 3** grid.
 
@@ -458,3 +458,14 @@ In particular, notice that `std::set::insert()` does not invalidate any iterator
 _This section concerns future revisions of this assignment._
 
 1. (Section [6.3](https://github.com/ivogeorg/ucd-csci2312-pa4/blob/master/README.md#63-piece-viability-energy-capacity-aging-finishing)) `Piece::finish()` is called by any `Resource` which gets consumed or `Agent` which loses a challenge with another `Agent`. Specifically, it is called in the implementation of the double-dispatch `virtual` interaction operator `operator*()`. See next section for details on the operator. **TODO: This is a game rule, and therefore should be _pulled up_ to the abstract classes. The leaf classes should not be relied upon to implement the game rules faithfully. This will open the possibility for an open implementation of leaf classes by students and team tournaments.**
+
+2. Add tests for randomization in:
+  1. Automatic game population.
+  2. Gameplay.
+
+3. Add tests for rule enforcement in:
+  1. Actions.
+  2. Interaction.
+  3. Termination.
+  
+4. Consider alternative game termination conditions.
