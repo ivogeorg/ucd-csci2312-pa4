@@ -59,7 +59,7 @@ Free Github repositories are public so you can look at each other's code. Please
 
 ### Use of libraries
 
-You are encouraged to make maximum use of the Standard Library especially including the Standard Template Library (STL).
+You are encouraged to make maximum use of the Standard Library, especially the Standard Template Library (STL).
 
 ### Coding style
 
