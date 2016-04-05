@@ -381,8 +381,8 @@ unsigned int Game::getNumSimple() const {
     unsigned int numAgents = 0;
 
     for (auto it = __grid.begin(); it != __grid.end(); ++it) {
-        Agent *agent = dynamic_cast<Simple*>(*it);
-        if (agent) numAgents ++;
+        Simple *simple = dynamic_cast<Simple*>(*it);
+        if (simple) numAgents ++;
     }
 
     return numAgents;
