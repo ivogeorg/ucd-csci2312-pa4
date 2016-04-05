@@ -471,3 +471,7 @@ _This section concerns future revisions of this assignment._
     1. Gameplay.
   
 3. Consider alternative game termination conditions.
+
+4. Explain forward class declarations used to avoid circular header includes.
+
+
