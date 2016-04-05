@@ -459,13 +459,15 @@ _This section concerns future revisions of this assignment._
 
 1. (Section [6.3](https://github.com/ivogeorg/ucd-csci2312-pa4/blob/master/README.md#63-piece-viability-energy-capacity-aging-finishing)) `Piece::finish()` is called by any `Resource` which gets consumed or `Agent` which loses a challenge with another `Agent`. Specifically, it is called in the implementation of the double-dispatch `virtual` interaction operator `operator*()`. See next section for details on the operator. **TODO: This is a game rule, and therefore should be _pulled up_ to the abstract classes. The leaf classes should not be relied upon to implement the game rules faithfully. This will open the possibility for an open implementation of leaf classes by students and team tournaments.**
 
-2. Add tests for randomization in:
-  1. Automatic game population.
-  2. Gameplay.
-
-3. Add tests for rule enforcement in:
-  1. Actions.
-  2. Interaction.
-  3. Termination.
+2. Add tests for:
+  1. Randomization in:
+    1. Automatic game population.
+    2. Gameplay.
+  2. Rule enforcement in:
+    1. Actions.
+    2. Interaction.
+    3. Termination.
+  3. Fairness in:
+    1. Gameplay.
   
-4. Consider alternative game termination conditions.
+3. Consider alternative game termination conditions.
