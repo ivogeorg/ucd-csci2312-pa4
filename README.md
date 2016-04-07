@@ -343,7 +343,7 @@ The `Game` is **over** when there are _no more `Resource`-s_ left on the grid. N
 
 The default `Game::Game()` constructor creates a **3 x 3** grid.
 
-##### 6.5 `Piece` position randomization
+##### 6.5 `Game` population randomization
 
 To randomize the positions of the Piece-s during automatic population, you can use code like this:
 
@@ -368,8 +368,13 @@ while (numStrategic > 0) {
 
 // Note: you can reuse the generator
 ```
+##### 6.6 `Piece` position randomization
 
-##### 6.6 RTTI & `std::dynamic_cast`
+## TODO 
+_reference `Gaming.h`
+
+
+##### 6.7 RTTI & `std::dynamic_cast`
 
 For the implementation of some functions, e.g. `Game::getNumSimple()`, you will need to know the runtime/dynamic derived type of an _upcast_ object (i.e. that is pointed to by a `Piece*` pointer). This is called _runtime type information (RTTI)_ and the following code illustrates the use of the C++ RTTI facility `std::dynamic_cast<>`:
 
@@ -391,7 +396,7 @@ unsigned int Game::getNumSimple() const {
 
 More on `dynamic_cast` in the [C++ Reference](http://en.cppreference.com/w/cpp/language/dynamic_cast).
 
-##### 6.7 `std::set`
+##### 6.8 `std::set`
 
 As mentioned above, `std::set` might be useful in the implementation of `Game::round()`. The following code contains a contrived example which you might find helpful:
 
