@@ -368,11 +368,36 @@ while (numStrategic > 0) {
 
 // Note: you can reuse the generator
 ```
-##### 6.6 `Piece` position randomization
 
-## TODO 
-_reference `Gaming.h`
+##### 6.6 `Agent` action randomization
 
+Often and `Agent` will have more than one `Piece` of the same type in its `Surroundings`, and will have to pick which one of them to go to. To randomize the actions of `Agent`-s during game play, use the `Game::randomPosition`. This function uses the functor `PositionRandomizer` defined in `Gaming.h`:
+
+```c++
+class PositionRandomizer {
+    std::default_random_engine __gen;
+    std::uniform_int_distribution<int> *__dist[10];
+
+public:
+    PositionRandomizer() {
+        for (int i = 0; i < 10; i++)
+            __dist[i] = new std::uniform_int_distribution<int>(0, i);
+    }
+
+    ~PositionRandomizer() {
+        for (int i = 0; i < 10; i++) delete __dist[i];
+    }
+
+    const Position operator()(const std::vector<int> &positionIndices) {
+        if (positionIndices.size() == 0) throw PosVectorEmptyEx();
+
+        int posIndex = (*__dist[positionIndices.size() - 1])(__gen);
+        return Position(
+                (unsigned) (positionIndices[posIndex] / 3),
+                (unsigned) (positionIndices[posIndex] % 3));
+    }
+};
+```
 
 ##### 6.7 RTTI & `std::dynamic_cast`
 
@@ -480,3 +505,4 @@ _This section concerns future revisions of this assignment._
 
 4. Explain forward class declarations used to avoid circular header includes.
 
+5. Remove inlines.
