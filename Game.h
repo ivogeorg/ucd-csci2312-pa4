@@ -49,8 +49,8 @@ namespace Gaming {
 
         Game();
         Game(unsigned width, unsigned height, bool manual = true); // note: manual population by default
-        Game(const Game &another);
-        Game &operator=(const Game &other) = delete;
+        Game(const Game &) = delete;
+        Game &operator=(const Game &) = delete;
         ~Game();
 
         // getters

@@ -1519,7 +1519,7 @@ void test_game_play(ErrorContext &ec, unsigned int numRuns) {
             g.addFood(2, 2);
             g.addAdvantage(1, 0);
 
-            g.play(false); // verbose = false, by default
+            g.play(true); // verbose = false, by default
 
             pass = (g.getNumResources() == 0) &&
                    (g.getNumAgents() == 2);
