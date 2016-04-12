@@ -506,3 +506,7 @@ _This section concerns future revisions of this assignment._
 4. Explain forward class declarations used to avoid circular header includes.
 
 5. Remove inlines.
+
+6. Add instructions for printing the game.
+
+7. Add `InvalidPositionEx`.
