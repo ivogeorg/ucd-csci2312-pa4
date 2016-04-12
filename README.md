@@ -507,6 +507,6 @@ _This section concerns future revisions of this assignment._
 
 5. Remove inlines.
 
-6. Add instructions for printing the game.
+6. Add instructions for printing the game. (hint: `std::stringstream`)
 
 7. Add `InvalidPositionEx`.
