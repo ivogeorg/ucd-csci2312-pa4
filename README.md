@@ -509,4 +509,6 @@ _This section concerns future revisions of this assignment._
 
 6. Add instructions for printing the game. (hint: `std::stringstream`)
 
-7. Add `InvalidPositionEx`.
+7. Improve exception coverage.
+
+8. Write and generate Doxygen documentation.
