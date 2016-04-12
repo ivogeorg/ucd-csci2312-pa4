@@ -507,7 +507,7 @@ _This section concerns future revisions of this assignment._
 
 5. Remove inlines.
 
-6. Add instructions for printing the game. (hint: `std::stringstream`)
+6. Add instructions for printing the game, in particular the use of `std::stringstream` for dynamic stream formatting. See [this SO thread](http://stackoverflow.com/questions/1532640/which-iomanip-manipulators-are-sticky).
 
 7. Improve exception coverage.
 
