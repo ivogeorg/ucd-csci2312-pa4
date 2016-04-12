@@ -514,3 +514,5 @@ _This section concerns future revisions of this assignment._
 7. Improve exception coverage.
 
 8. Write and generate Doxygen documentation.
+
+9. Elaborate on the turn taking and the methods (documentation).
