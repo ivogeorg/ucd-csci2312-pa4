@@ -1,41 +1,45 @@
-//
-// Created by HosZul on 4/1/2016.
-//
+// Hosna Zulali
+// 101485552
+// Extended Due Date for 85% of Total
 
-#include <iomanip>
-#include <sstream>
+
 #include "Advantage.h"
+#include <sstream>
 
-namespace Gaming
-{
-    const char Advantage::ADVANTAGE_ID = 'D';
-    const double Advantage::ADVANTAGE_MULT_FACTOR = 2.0;
+using namespace std;
+using namespace Gaming;
 
-    Advantage::Advantage(const Game &g, const Position &p, double capacity): Resource(g,p,capacity*ADVANTAGE_MULT_FACTOR )
+const char Advantage::ADVANTAGE_ID = 'D';
+const double Advantage::ADVANTAGE_MULT_FACTOR = 2.0;
+
+    Advantage::Advantage(const Game &g, const Position &p, double capacity):Resource(g,p,capacity)
     {
-        __capacity = capacity * ADVANTAGE_MULT_FACTOR;
+        // Blank
     }
 
-    Advantage:: ~Advantage()
+    Advantage::~Advantage()
     {
-        //
+        // Blank
     }
 
-    void Advantage::print(std::ostream &os) const
+    void Advantage::print(ostream &os) const
     {
-        os << ADVANTAGE_ID << std::setw(4) << std::left << __id;
+        stringstream strstr;
+        strstr << ADVANTAGE_ID << __id;
+        string s;
+        getline(strstr,s);
+        os << s;
     }
 
     double Advantage::getCapacity() const
     {
-        return __capacity;
+        return (__capacity * ADVANTAGE_MULT_FACTOR);
     }
 
     double Advantage::consume()
     {
-        double consume = __capacity;
+        double temp = getCapacity();
         __capacity = 0;
         finish();
-        return __capacity*ADVANTAGE_MULT_FACTOR;
+        return temp;
     }
-}

@@ -1,27 +1,29 @@
-//
-// Created by HosZul on 4/1/2016.
-//
-#include <iomanip>
-#include <sstream>
+// Hosna Zulali
+// 101485552
+// Extended Due Date for 85% of Total
+
 #include "Food.h"
+#include <sstream>
 
-namespace Gaming
-{
+using namespace std;
+using namespace Gaming;
+
     const char Food::FOOD_ID = 'F';
-
     Food::Food(const Game &g, const Position &p, double capacity):Resource(g,p,capacity)
     {
-        __capacity = capacity;
+        // Blank
     }
 
     Food::~Food()
     {
-        //
+        // Blank
     }
 
     void Food::print(std::ostream &os) const
     {
-        os << FOOD_ID << std::setw(4) << std::left << __id;
-        os << std::setw(0);
+        stringstream ss;
+        ss << FOOD_ID << __id;
+        string s;
+        getline(ss,s);
+        os << s;
     }
-}

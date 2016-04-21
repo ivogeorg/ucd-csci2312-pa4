@@ -1,38 +1,37 @@
-//
-// Created by HosZul on 4/1/2016.
-//
+// Hosna Zulali
+// 101485552
+// Extended Due Date for 85% of Total
 
 #include "Piece.h"
-#include "Gaming.h"
-#include "Game.h"
 
-namespace Gaming {
-    unsigned int Piece::__idGen = 1000;
+using namespace std;
+using namespace Gaming;
 
-    Piece::Piece(const Game &g, const Position &p) : __game(g), __position(p) {
+unsigned int Piece::__idGen = 0;
+
+    Piece::Piece(const Game &g, const Position &pos):__game(g)
+    {
         __id = __idGen++;
+
         __turned = false;
+
         __finished = false;
+
+        __position = pos;
     }
 
-    Piece::~Piece() {
-        //
+    Piece::~Piece()
+    {
+        // Blank
     }
 
-    std::ostream &operator<<(std::ostream &os, const Piece &piece) {
-        if (&piece != nullptr)
+    ostream & Gaming::operator<<(ostream &os, const Piece &pc)
+    {
+        if(&pc != nullptr)
         {
-            piece.print(os);
-        }
-
-        else
-        {
-            os << "";
+            pc.print(os);
         }
 
         return os;
-
     }
 
-
-}

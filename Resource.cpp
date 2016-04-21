@@ -1,16 +1,13 @@
-//
-// Created by HosZul on 4/1/2016.
-//
+// Hosna Zulali
+// 101485552
+// Extended Due Date for 85% of Total
 
-#include "Food.h"
 #include "Resource.h"
-#include "Gaming.h"
-#include "Game.h"
-#include "Agent.h"
 
-namespace Gaming
-{
-    const double Resource::RESOURCE_SPOIL_FACTOR = 1.2;
+using namespace std;
+using namespace Gaming;
+
+const double Resource::RESOURCE_SPOIL_FACTOR = 1.2;
 
     Resource::Resource(const Game &g, const Position &p, double capacity):Piece(g,p)
     {
@@ -19,23 +16,25 @@ namespace Gaming
 
     Resource::~Resource()
     {
-        //
+        // Blank
     }
 
     double Resource::consume()
     {
-        double temp = __capacity;
-        __capacity = 0;
+        double consume = __capacity;
+        this->__capacity = 0;
+
         finish();
-        return __capacity;
+
+        return consume;
     }
 
     void Resource::age()
     {
-         __capacity /= RESOURCE_SPOIL_FACTOR;
+        __capacity /= RESOURCE_SPOIL_FACTOR;
 
-         if(__capacity < .01)
-             __capacity = 0;
+        if (__capacity < 1)
+            __capacity = 0;
     }
 
     ActionType Resource::takeTurn(const Surroundings &s) const
@@ -43,12 +42,12 @@ namespace Gaming
         return STAY;
     }
 
-    Piece &Resource::interact(Agent *)
+    Piece &Resource::operator*(Piece &other)
     {
         return *this;
     }
 
-    Piece &Resource::operator*(Piece &other)
+    Piece &Resource::interact(Agent *)
     {
         return *this;
     }
@@ -57,4 +56,4 @@ namespace Gaming
     {
         return *this;
     }
-}
+

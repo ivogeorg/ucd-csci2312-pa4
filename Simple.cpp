@@ -1,101 +1,75 @@
-//
-// Created by HosZul on 4/1/2016.
-//
 #include "Simple.h"
-#include "Strategy.h"
 #include <iomanip>
+#include <sstream>
 
-
-namespace Gaming{
+using namespace std;
+using namespace Gaming;
 
     const char Simple::SIMPLE_ID = 'S';
 
-    Simple::Simple(const Game &g, const Position &p, double energy) : Agent(g, p, energy){
-
+    Simple::Simple(const Game &g, const Position &p, double energy):Agent(g, p, energy)
+    {
+        // blank
     }
 
-    Simple::~Simple() {
-
+    Simple::~Simple()
+    {
+        //Blank
     }
 
-    void Simple::print(std::ostream &os) const {
-        os << SIMPLE_ID << std::setw(4) << std::left <<__id;
+    void Simple::print(std::ostream &os) const
+    {
+        stringstream strstr;
+        strstr << SIMPLE_ID << __id;
+
+        string s;
+        getline(strstr,s);
+
+        os << s;
     }
 
-    ActionType Simple::takeTurn(const Surroundings &s) const {
+    ActionType Simple::takeTurn(const Surroundings &s) const
+    {
+
+        vector <ActionType> act = {NW,N,NE,W,STAY,E,SW,S,SE};
+        vector <int> pI;
+        int numDir = 0;
+
+        random_device rd;
+        mt19937 gen(rd());
 
 
-        ActionType aT;
-        std::vector<int> pos;
 
-        std::random_device rd;
-        std::mt19937 gen(rd());
-
-        for (int i = 0; i < s.array.size(); i++)
+        for (int index = 0; index < s.array.size(); ++index)
         {
-            if (s.array[i] == ADVANTAGE || s.array[i] == FOOD)
+            if(s.array[index] == FOOD || s.array[index] == ADVANTAGE)
             {
-                pos.push_back(i);
+                pI.push_back(index);
+                numDir++;
             }
         }
 
-        if (pos.size() == 0)
+        if(numDir > 0)
         {
-            for (int i = 0; i < s.array.size(); i++)
+            uniform_int_distribution<> dis(0, numDir - 1);
+            return act[pI[dis(gen)]];
+        }
+
+        for (int index = 0; index < s.array.size(); ++index)
+        {
+            if(s.array[index] == EMPTY)
             {
-                if (s.array[i] == EMPTY) {
-                    pos.push_back(i);
-                }
+                pI.push_back(index);
+                numDir++;
             }
         }
 
-        if (pos.size() > 0)
+        if(numDir > 0)
         {
-            std::uniform_int_distribution<> dis(0, (int) (pos.size()-1));
-            int index = dis(gen);
-
-            if (pos.size() == 1)
-            {
-                index = pos[0];
-            }
-
-            switch (pos[index])
-            {
-                case 1 :
-                    aT = N;
-                    break;
-                case 2 :
-                    aT = NE;
-                    break;
-                case 5 :
-                    aT = E;
-                    break;
-                case 8 :
-                    aT = SE;
-                    break;
-                case 7 :
-                    aT = S;
-                    break;
-                case 6 :
-                    aT = SW;
-                    break;
-                case 3 :
-                    aT = W;
-                    break;
-                case 0 :
-                    aT = NW;
-                    break;
-                case 4 :
-                    aT = STAY;
-                    break;
-                default :
-                    aT = STAY;
-            }
-            return aT;
-
+            uniform_int_distribution<> dis(0, numDir - 1);
+            return act[pI[dis(gen)]];
         }
-
         return STAY;
 
     }
-}
+

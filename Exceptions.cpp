@@ -1,28 +1,32 @@
-//
-// Created by HosZul on 4/1/2016.
-//
+// Hosna Zulali
+// 101485552
+// Extended Due Date for 85% of Total
+
 #include "Exceptions.h"
 
-namespace Gaming
-{
-    void GamingException::setName(std::string name)
+using namespace std;
+using namespace Gaming;
+
+    void GamingException::setName(string name)
     {
         __name = name;
     }
 
-    std::ostream &operator << (std::ostream &os, const GamingException &ex)
+    namespace Gaming
     {
-        os << ex.getName() << std::endl;
-        return os;
+        ostream &operator<<(ostream &os, const GamingException &ex)
+        {
+            os << ex.getName() << endl;
+            return os;
+        }
     }
 
     DimensionEx::DimensionEx(unsigned expWidth, unsigned expHeight, unsigned width, unsigned height)
     {
         __width = width;
-        __exp_width = expWidth;
         __height = height;
+        __exp_width = expWidth;
         __exp_height = expHeight;
-        __name = "DimensionEx";
     }
 
     unsigned DimensionEx::getWidth() const
@@ -30,59 +34,58 @@ namespace Gaming
         return __width;
     }
 
-    unsigned DimensionEx::getExpWidth() const
-    {
-        return __exp_width;
-    }
-
     unsigned DimensionEx::getHeight() const
     {
         return __height;
     }
 
+    unsigned DimensionEx::getExpWidth() const
+    {
+        return __exp_width;
+    }
+
     unsigned DimensionEx::getExpHeight() const
     {
-        return __height;
+        return __exp_height;
     }
 
     void InsufficientDimensionsEx::__print_args(std::ostream &os) const
     {
-      // os << getExpHeight() <<
+        // Blank
     }
 
-    InsufficientDimensionsEx::InsufficientDimensionsEx(unsigned minWidth, unsigned minHeight, unsigned width, unsigned height) : DimensionEx(minWidth, minHeight, width, height)
+    InsufficientDimensionsEx::InsufficientDimensionsEx(unsigned minWidth, unsigned minHeight, unsigned width, unsigned height):DimensionEx(minWidth,minHeight,width,height)
     {
-        setName("InsufficientDimensionsEx");
+        __name = "InsufficientDimensionsEx";
     }
 
     void OutOfBoundsEx::__print_args(std::ostream &os) const
     {
-        os << "Name: " << __name << std::endl;
-        os << "Game Grid: " << __exp_height << 'x' << __exp_width << std::endl;
-        os << "Coordinate: ("<< __width<< "," << __height << ")" << std::endl;
+        os << __name << endl;
+        os << __exp_height << 'x' << __exp_width << endl;
+        os <<  __width <<", "<< __height ;
     }
 
-    OutOfBoundsEx::OutOfBoundsEx(unsigned maxWidth, unsigned maxHeight, unsigned width, unsigned height) : DimensionEx(maxWidth, maxHeight, width, height)
+    OutOfBoundsEx::OutOfBoundsEx(unsigned maxWidth, unsigned maxHeight, unsigned width, unsigned height): DimensionEx(maxWidth,maxHeight,width,height)
     {
-        __name = "OutOfBounds";
+        __name = "OutOfBoundsEx";
     }
 
     void PositionEx::__print_args(std::ostream &os) const
     {
-       os << "Name: " << __name << std::endl;
-        os << "Coordinate: (" << __x << "," << __y << ")" << std:: endl;
+        os <<  __name << endl;
+        os <<__x <<","<<__y;
     }
 
     PositionEx::PositionEx(unsigned x, unsigned y)
     {
-     __x = x;
+        __x = x;
         __y = y;
-        __name = "PoisitionEx";
     }
 
     PositionNonemptyEx::PositionNonemptyEx(unsigned x, unsigned y) : PositionEx(x,y)
     {
-        __name = "PositionNonEmptyEx";
+        __name = "PositionNonemptyEx";
     }
 
     PositionEmptyEx::PositionEmptyEx(unsigned x, unsigned y) : PositionEx(x,y)
@@ -92,11 +95,10 @@ namespace Gaming
 
     void PosVectorEmptyEx::__print_args(std::ostream &os) const
     {
-        os << "Name: " << __name;
+        os << __name;
     }
 
     PosVectorEmptyEx::PosVectorEmptyEx()
     {
         __name = "PosVectorEmptyEx";
-    }
 }
