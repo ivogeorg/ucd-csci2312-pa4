@@ -63,7 +63,7 @@ using namespace Gaming;
     {
         os << __name << endl;
         os << __exp_height << 'x' << __exp_width << endl;
-        os <<  __width <<", "<< __height ;
+        os <<  __width <<" , "<< __height ;
     }
 
     OutOfBoundsEx::OutOfBoundsEx(unsigned maxWidth, unsigned maxHeight, unsigned width, unsigned height): DimensionEx(maxWidth,maxHeight,width,height)

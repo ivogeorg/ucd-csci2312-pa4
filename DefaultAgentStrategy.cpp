@@ -32,10 +32,10 @@ using namespace Gaming;
 
         if(pI.size() > 0)
         {
-            PositionRandomizer p;
-            Position pos = p(pI);
+            PositionRandomizer pR;
+            Position pos = pR(pI);
 
-            return action[(pos.x * 3.0 + pos.y)];
+            return action[((pos.x * 3.0) + pos.y)];
         }
 
         for (int index = 0; index < s.array.size(); ++index)
@@ -48,10 +48,10 @@ using namespace Gaming;
 
         if(pI.size() > 0)
         {
-            PositionRandomizer p;
-            Position pos = p(pI);
+            PositionRandomizer pR;
+            Position pos = pR(pI);
 
-            return action[(pos.x * 3.0 + pos.y)];
+            return action[((pos.x * 3.0) + pos.y)];
         }
 
         for (int index = 0; index < s.array.size(); ++index)
@@ -64,10 +64,10 @@ using namespace Gaming;
 
         if(pI.size() > 0)
         {
-            PositionRandomizer p;
-            Position pos = p(pI);
+            PositionRandomizer pR;
+            Position pos = pR(pI);
 
-            return action[(pos.x * 3.0 + pos.y)];
+            return action[((pos.x * 3.0 + pos.y))];
         }
 
         for (int index = 0; index < s.array.size(); ++index)
@@ -80,10 +80,11 @@ using namespace Gaming;
 
         if(pI.size() > 0)
         {
-            PositionRandomizer p;
-            Position pos = p(pI);
+            PositionRandomizer pR;
+            Position pos = pR(pI);
 
-            return action[(pos.x * 3.0 + pos.y)];
+            return action[((pos.x * 3.0) + pos.y)];
         }
+
         return STAY;
     }

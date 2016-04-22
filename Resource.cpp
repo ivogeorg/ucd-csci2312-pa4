@@ -22,7 +22,7 @@ const double Resource::RESOURCE_SPOIL_FACTOR = 1.2;
     double Resource::consume()
     {
         double consume = __capacity;
-        this->__capacity = 0;
+        this -> __capacity = 0;
 
         finish();
 
@@ -34,6 +34,7 @@ const double Resource::RESOURCE_SPOIL_FACTOR = 1.2;
         __capacity /= RESOURCE_SPOIL_FACTOR;
 
         if (__capacity < 1)
+
             __capacity = 0;
     }
 
@@ -56,4 +57,3 @@ const double Resource::RESOURCE_SPOIL_FACTOR = 1.2;
     {
         return *this;
     }
-

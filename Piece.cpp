@@ -34,4 +34,3 @@ unsigned int Piece::__idGen = 0;
 
         return os;
     }
-

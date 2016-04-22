@@ -27,6 +27,7 @@ using namespace Gaming;
 
         string s;
         getline(strstr,s);
+
         os << s;
     }
 

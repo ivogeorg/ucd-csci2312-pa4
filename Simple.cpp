@@ -33,8 +33,10 @@ using namespace Gaming;
 
         vector <ActionType> act = {NW,N,NE,W,STAY,E,SW,S,SE};
         vector <int> pI;
+
         int numDir = 0;
 
+        // Random
         random_device rd;
         mt19937 gen(rd());
 
@@ -45,6 +47,7 @@ using namespace Gaming;
             if(s.array[index] == FOOD || s.array[index] == ADVANTAGE)
             {
                 pI.push_back(index);
+
                 numDir++;
             }
         }
@@ -52,6 +55,7 @@ using namespace Gaming;
         if(numDir > 0)
         {
             uniform_int_distribution<> dis(0, numDir - 1);
+
             return act[pI[dis(gen)]];
         }
 
@@ -60,6 +64,7 @@ using namespace Gaming;
             if(s.array[index] == EMPTY)
             {
                 pI.push_back(index);
+
                 numDir++;
             }
         }
@@ -67,9 +72,9 @@ using namespace Gaming;
         if(numDir > 0)
         {
             uniform_int_distribution<> dis(0, numDir - 1);
+
             return act[pI[dis(gen)]];
         }
+
         return STAY;
-
     }
-

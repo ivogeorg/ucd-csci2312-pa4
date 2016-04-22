@@ -582,8 +582,8 @@ const unsigned int Game::NUM_INIT_RESOURCE_FACTOR = 2;
 
                 else
                 {
-                    __grid[i]->setTurned(false);
-                    __grid[i]->age();
+                    __grid[i] -> setTurned(false);
+                    __grid[i] -> age();
                 }
             }
         }

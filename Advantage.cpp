@@ -26,8 +26,10 @@ const double Advantage::ADVANTAGE_MULT_FACTOR = 2.0;
     {
         stringstream strstr;
         strstr << ADVANTAGE_ID << __id;
+
         string s;
         getline(strstr,s);
+
         os << s;
     }
 
@@ -38,8 +40,11 @@ const double Advantage::ADVANTAGE_MULT_FACTOR = 2.0;
 
     double Advantage::consume()
     {
-        double temp = getCapacity();
+        double surr = getCapacity();
+
         __capacity = 0;
+
         finish();
-        return temp;
+
+        return surr;
     }

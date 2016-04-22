@@ -28,15 +28,17 @@ using namespace Gaming;
     Piece &Agent::operator*(Piece &other)
     {
         Agent *otherAgent = dynamic_cast<Agent*>(&other);
+
         if(otherAgent)
         {
             return this->interact(otherAgent);
         }
 
         Resource *resource = dynamic_cast<Resource*>(&other);
+
         if(resource)
         {
-            return  this->interact(resource);
+            return  this -> interact(resource);
         }
         return *this;
     }
@@ -46,23 +48,30 @@ using namespace Gaming;
 
         if (__energy < other->__energy)
         {
-            other->__energy -=__energy;
+            other -> __energy -= __energy;
+
             __energy=0;
+
             finish();
         }
 
         else if(__energy > other->__energy)
         {
             __energy -= other->__energy;
+
             other->__energy = 0;
+
             other->finish();
         }
 
         else
         {
             __energy = 0.0;
-            other->__energy = 0.0;
+
+            other -> __energy = 0.0;
+
             finish();
+
             other->finish();
         }
         return *this;
@@ -70,6 +79,7 @@ using namespace Gaming;
 
     Piece &Agent::interact(Resource * other)
     {
-        this->addEnergy(other->consume());
+        this -> addEnergy(other -> consume());
+
         return *this;
     }
