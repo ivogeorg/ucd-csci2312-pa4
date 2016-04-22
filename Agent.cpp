@@ -67,8 +67,9 @@ using namespace Gaming;
         }
         return *this;
     }
+
     Piece &Agent::interact(Resource * other)
     {
         this->addEnergy(other->consume());
         return *this;
-}
+    }

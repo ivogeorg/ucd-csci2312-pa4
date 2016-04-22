@@ -3,14 +3,18 @@
 // Extended Due Date for 85% of Total
 
 #include <iomanip>
-#include "Game.h"
+
 #include "Simple.h"
 #include "Strategic.h"
-#include "Advantage.h"
+#include "Game.h"
 #include "Food.h"
+#include "Advantage.h"
+
 
 using namespace std;
 using namespace Gaming;
+
+PositionRandomizer Game::__posRandomizer;
 
 const unsigned int Game::MIN_WIDTH = 3;
 const unsigned int Game::MIN_HEIGHT = 3;
@@ -19,14 +23,10 @@ const double Game::STARTING_RESOURCE_CAPACITY = 10;
 const unsigned  int Game::NUM_INIT_AGENT_FACTOR = 4;
 const unsigned int Game::NUM_INIT_RESOURCE_FACTOR = 2;
 
-PositionRandomizer Game::__posRandomizer;
-
-
     void Game::populate()
     {
         __numInitAgents = (__width * __height) / NUM_INIT_AGENT_FACTOR;
         __numInitResources = (__width * __height) / NUM_INIT_RESOURCE_FACTOR;
-
         unsigned int numStrategic = __numInitAgents / 2;
         unsigned int numSimple = __numInitAgents - numStrategic;
         unsigned int numAdvantages = __numInitResources / 4;
@@ -37,73 +37,83 @@ PositionRandomizer Game::__posRandomizer;
 
         while (numStrategic > 0)
         {
-            int i = d(gen);
+            // Random Index
+            int rT = d(gen);   
 
-            if (__grid[i] == nullptr)
+            if (__grid[rT] == nullptr)
             {
-                Position pos(i / __width, i % __width);
+                Position pos(rT / __width, rT % __width);
 
-                __grid[i] = new Strategic(*this, pos, STARTING_AGENT_ENERGY);
+                __grid[rT] = new Strategic(*this, pos, STARTING_AGENT_ENERGY);
+
                 numStrategic --;
             }
         }
 
         while (numSimple > 0)
         {
-            int i = d(gen);
+            // Random index
+            int rT = d(gen);
 
-            if (__grid[i] == nullptr)
+            if (__grid[rT] == nullptr)
             {
-                Position pos(i / __width, i % __width);
-                __grid[i] = new Simple(*this, pos, STARTING_AGENT_ENERGY);
+                Position pos(rT / __width, rT % __width);
+
+                __grid[rT] = new Simple(*this, pos, STARTING_AGENT_ENERGY);
+
                 numSimple --;
             }
         }
 
         while (numAdvantages > 0)
         {
-            int i = d(gen);
+            // Random Index
+            int rT = d(gen);
 
-            if (__grid[i] == nullptr)
+            // Empty
+            if (__grid[rT] == nullptr)
             {
-                Position pos(i / __width, i % __width);
-                __grid[i] = new Advantage(*this, pos, STARTING_RESOURCE_CAPACITY);
+                Position pos(rT / __width, rT % __width);
+
+                __grid[rT] = new Advantage(*this, pos, STARTING_RESOURCE_CAPACITY);
+
                 numAdvantages --;
             }
         }
 
         while (numFoods > 0)
         {
-            int i = d(gen);
+           // Random Index
+            int rT = d(gen);
 
-            if (__grid[i] == nullptr)
+            // Empty
+            if (__grid[rT] == nullptr)
             {
-                Position pos(i / __width, i % __width);
-                __grid[i] = new Food(*this, pos, STARTING_RESOURCE_CAPACITY);
+                Position pos(rT / __width, rT % __width);
+
+                __grid[rT] = new Food(*this, pos, STARTING_RESOURCE_CAPACITY);
+
                 numFoods --;
             }
         }
-
     }
 
     Game::Game()
     {
+        __round = 0;
         __width = 3;
         __height = 3;
         __numInitAgents = 0;
         __numInitResources = 0;
-        __round = 0;
-        __verbose = false;
         __status = NOT_STARTED ;
+        __verbose = false;
 
-
-        for (int i = 0; i < __width*__height; ++i)
+        for (int index = 0; index < __width*__height; ++index)
         {
             __grid.push_back(nullptr) ;
         }
 
     }
-
 
     Game::Game(unsigned width, unsigned height, bool manual)
     {
@@ -112,15 +122,15 @@ PositionRandomizer Game::__posRandomizer;
             throw InsufficientDimensionsEx(MIN_WIDTH, MIN_HEIGHT, width, height);
         }
 
-        __numInitAgents = 0;
-        __numInitResources = 0;
+        __round = 0;
         __width = width;
         __height = height;
+        __numInitAgents = 0;
+        __numInitResources = 0;
         __verbose = false;
         __status = NOT_STARTED;
-        __round = 0;
 
-        for (int i = 0; i < __width * __height; ++i)
+        for (int index = 0; index < __width*__height; ++index)
         {
             __grid.push_back(nullptr) ;
         }
@@ -133,15 +143,14 @@ PositionRandomizer Game::__posRandomizer;
 
     Game::~Game()
     {
-        for (int i = 0; i < __grid.size(); ++i)
+        for (int index = 0; index < __grid.size(); ++index)
         {
-            if (__grid[i] != nullptr)
+            if (__grid[index] != nullptr)
             {
-                delete __grid[i];
+                delete __grid[index];
             }
         }
     }
-
 
     unsigned int Game::getNumPieces() const
     {
@@ -155,279 +164,279 @@ PositionRandomizer Game::__posRandomizer;
 
     unsigned int Game::getNumSimple() const
     {
-        unsigned int numAgents =0;
-        for (int i = 0; i < __grid.size(); ++i)
+        unsigned int nA =0;
+
+        for (int index = 0; index < __grid.size(); ++index)
         {
-            if(__grid[i]!= nullptr)
+            if(__grid[index]!= nullptr)
             {
-                if (__grid[i]->getType() == SIMPLE)
+                if (__grid[index]->getType() == SIMPLE)
                 {
-                    numAgents++;
+                    nA++;
                 }
             }
         }
-        return numAgents;
+        return nA;
     }
 
     unsigned int Game::getNumStrategic() const
     {
-        unsigned int numAgents = 0;
-        
-        for (int i = 0; i < __grid.size(); ++i)
+        unsigned int nA = 0;
+
+        for (int index = 0; index < __grid.size(); ++index)
         {
-            if(__grid[i]!= nullptr)
+            if(__grid[index]!= nullptr)
             {
-                if (__grid[i]->getType() == STRATEGIC)
+                if (__grid[index]->getType() == STRATEGIC)
                 {
-                    numAgents++;
+                    nA++;
                 }
             }
         }
-        return numAgents;
+        return nA;
     }
 
     unsigned int Game::getNumResources() const
     {
-        unsigned int numAgents =0;
+        unsigned int nA = 0;
 
-        for (int i = 0; i < __grid.size(); ++i)
+        for (int index = 0; index < __grid.size(); ++index)
         {
-            if(__grid[i]!= nullptr)
+            if(__grid[index]!= nullptr)
             {
-                if (__grid[i]->getType() == FOOD || __grid[i]->getType() == ADVANTAGE)
+                if (__grid[index]->getType() == FOOD || __grid[index]->getType() == ADVANTAGE)
                 {
-                    numAgents++;
+                    nA++;
                 }
             }
         }
-        return numAgents;
+        return nA;
     }
 
     const Piece *Game::getPiece(unsigned int x, unsigned int y) const
     {
-
         if(__grid[((x*__width)+y)] != nullptr)
         {
             return __grid[((x*__width)+y)];
         }
-
         throw PositionEmptyEx(x,y);
     }
 
-
-    void Game::addSimple(const Position &position)
+    void Game::addSimple(const Position &pos)
     {
-
-        if((position.x*__width + position.y)>__grid.size())
+        if(((pos.x*__width) + pos.y)>__grid.size())
         {
-            throw OutOfBoundsEx(__width,__height,position.x,position.y);
+            throw OutOfBoundsEx(__width, __height, pos.x, pos.y);
         }
 
-        if((__grid[position.x*__width + position.y])!=nullptr)
+        if((__grid[(pos.x*__width) + pos.y])!=nullptr)
         {
-            throw PositionNonemptyEx(position.x,position.y);
+            throw PositionNonemptyEx(pos.x, pos.y);
         }
 
-        __grid[position.x*__width + position.y] = new Simple(*this,position,STARTING_AGENT_ENERGY);
+        __grid[(pos.x*__width) + pos.y] = new Simple(*this,pos,STARTING_AGENT_ENERGY);
     }
 
-
-    void Game::addSimple(const Position &position, double energy)
+    void Game::addSimple(const Position &pos, double energy)
     {
-        if((position.x*__width + position.y)>__grid.size())
+        if(((pos.x*__width) + pos.y)>__grid.size())
         {
-            throw OutOfBoundsEx(__width,__height,position.x,position.y);
+            throw OutOfBoundsEx(__width, __height, pos.x, pos.y);
         }
 
-        if((__grid[position.x*__width + position.y])!=nullptr)
+        if((__grid[(pos.x*__width) + pos.y])!=nullptr)
         {
-            throw PositionNonemptyEx(position.x,position.y);
+            throw PositionNonemptyEx(pos.x, pos.y);
         }
 
-        __grid[position.x*__width + position.y] = new Simple(*this,position,energy);
+        __grid[(pos.x*__width) + pos.y] = new Simple(*this,pos,energy);;
     }
 
     void Game::addSimple(unsigned x, unsigned y)
     {
-        Position p(x,y);
-        this->addSimple(p);
+        Position pos(x,y);
+        this->addSimple(pos);
     }
 
     void Game::addSimple(unsigned x, unsigned y, double energy)
     {
-        Position p(x,y);
-        this->addSimple(p,energy);
+        Position pos(x,y);
+        this->addSimple(pos,energy);
     }
 
-    void Game::addStrategic(const Position &position, Strategy *s)
+    void Game::addStrategic(const Position &pos, Strategy *str)
     {
-        if((position.x*__width + position.y)>__grid.size())
+        if(((pos.x*__width) + pos.y)>__grid.size())
         {
-            throw OutOfBoundsEx(__width, __height, position.x, position.y);
+            throw OutOfBoundsEx(__width, __height, pos.x, pos.y);
         }
 
-        if((__grid[position.x*__width + position.y])!=nullptr)
+        if((__grid[(pos.x*__width) + pos.y])!=nullptr)
         {
-            throw PositionNonemptyEx(position.x, position.y);
+            throw PositionNonemptyEx(pos.x, pos.y);
         }
 
-        __grid[position.x*__width + position.y] = new Strategic(*this, position, STARTING_AGENT_ENERGY, s);;
+        __grid[(pos.x*__width) + pos.y] = new Strategic(*this, pos, STARTING_AGENT_ENERGY, str);
     }
 
-    void Game::addStrategic(unsigned x, unsigned y, Strategy *s)
+    void Game::addStrategic(unsigned x, unsigned y, Strategy *str)
     {
-        Position p(x,y);
-        this->addStrategic(p,s);
+        Position pos(x,y);
+        this->addStrategic(pos,str);
     }
 
-    void Game::addFood(const Position &position)
+    void Game::addFood(const Position &pos)
     {
-        if((position.x*__width + position.y) > __grid.size())
+        if(((pos.x*__width) + pos.y) > __grid.size())
         {
-            throw OutOfBoundsEx(__width, __height, position.x, position.y);
+            throw OutOfBoundsEx(__width, __height, pos.x, pos.y);
         }
 
-        if((__grid[position.x*__width + position.y])!=nullptr)
+        if((__grid[pos.x*__width + pos.y])!=nullptr)
         {
-            throw PositionNonemptyEx(position.x,position.y);
+            throw PositionNonemptyEx(pos.x,pos.y);
         }
 
-        __grid[position.x*__width + position.y] = new Food(*this, position, STARTING_RESOURCE_CAPACITY);;
+        __grid[(pos.x*__width) + pos.y] = new Food(*this, pos, STARTING_RESOURCE_CAPACITY);;
     }
 
     void Game::addFood(unsigned x, unsigned y)
     {
-        Position p(x,y);
-        this->addFood(p);
+        Position pos(x,y);
+        this->addFood(pos);
     }
 
-    void Game::addAdvantage(const Position &position)
+    void Game::addAdvantage(const Position &pos)
     {
-
-        if((position.x*__width + position.y)>__grid.size())
+        if(((pos.x*__width) + pos.y)>__grid.size())
         {
-            throw OutOfBoundsEx(__width,__height,position.x,position.y);
+            throw OutOfBoundsEx(__width, __height, pos.x, pos.y);
         }
 
-        if((__grid[position.x*__width + position.y])!=nullptr)
+        if((__grid[(pos.x*__width) + pos.y])!=nullptr)
         {
-            throw PositionNonemptyEx(position.x,position.y);
+            throw PositionNonemptyEx(pos.x, pos.y);
         }
 
-        __grid[position.x*__width + position.y] = new Advantage(*this,position,STARTING_RESOURCE_CAPACITY);;
+        __grid[(pos.x*__width) + pos.y] = new Advantage(*this,pos,STARTING_RESOURCE_CAPACITY);
     }
 
     void Game::addAdvantage(unsigned x, unsigned y)
     {
-        Position p(x,y);
-        this->addAdvantage(p);
+        Position pos(x,y);
+        this->addAdvantage(pos);
     }
 
     const Surroundings Game::getSurroundings(const Position &pos) const
     {
-        Surroundings tp;
-        int tX = pos.x-1;
+        Surroundings surr;
+        int surrX = pos.x - 1;
 
-        for (int i = 0; i < 3; ++i)
+        for (int index = 0; index < 3; ++index)
         {
-            int tY = pos.y-1;
+            int surrY = pos.y-1;
+
             for (int i = 0; i < 3; ++i)
             {
-                if(((tX * __width) + tY)==((pos.x*__width)+pos.y))
+                if(((surrX * __width) + surrY)==((pos.x*__width)+pos.y))
                 {
-                    tp.array[(i * 3) + i] = SELF;
+                    surr.array[(index * 3) + i] = SELF;
                 }
 
-                else if(tX < 0 ||tX >__height-1 || tY<0 || tY > __width-1)
+                else if(surrX < 0 ||surrX >__height-1 || surrY<0 || surrY > __width-1)
                 {
-                    tp.array[(i * 3) + i] = INACCESSIBLE;
+                    surr.array[(index * 3) + i] = INACCESSIBLE;
                 }
 
-                else if (__grid[(tX * __width) + tY] == nullptr)
+                else if (__grid[(surrX * __width) + surrY] == nullptr)
                 {
-                    tp.array[(i * 3) + i] = EMPTY;
+                    surr.array[(index * 3) + i] = EMPTY;
                 }
 
                 else
                 {
-                    tp.array[(i * 3) + i] = __grid[(tX * __width) + tY]->getType();
+                    surr.array[(index * 3) + i] = __grid[(surrX * __width) + surrY]->getType();
                 }
-                tY++;
+                surrY++;
             }
-            tX++;
+            surrX++;
 
         }
-        return tp;
+        return surr;
     }
 
 
     const ActionType Game::reachSurroundings(const Position &from, const Position &to)
     {
 
-        ActionType aT =STAY;
-        int xtoX = to.x-from.x;
-        int ytoY = to.y-from.y;
+        ActionType surr =STAY;
+        int xFinal = to.x - from.x;
+        int yFinal = to.y - from.y;
 
-        if(xtoX == - 1 && ytoY == - 1)
+        if(xFinal == - 1 && yFinal == - 1)
         {
-            aT = NW;
-        }
-
-        else if(xtoX == - 1 && ytoY == 1)
-        {
-            aT =NE;
+            surr = NW;
         }
 
-        else if(xtoX == - 1 && ytoY == 0)
+        else if(xFinal == - 1 && yFinal == 1)
         {
-            aT = N;
+            surr =NE;
         }
 
-        else if(xtoX == 0 && ytoY == - 1)
+        else if(xFinal == - 1 && yFinal == 0)
         {
-            aT =W;
-        }
-        else if(xtoX == 0 && ytoY == 0)
-        {
-            aT =STAY;
-        }
-        else if(xtoX == 0 && ytoY == 1)
-        {
-            aT =E;
-        }
-        else if(xtoX == 1 && ytoY == - 1)
-        {
-            aT =SW;
-        }
-        else if(xtoX == 1 && ytoY == 0)
-        {
-            aT =S;
-        }
-        else if(xtoX == 1 && ytoY == 1)
-        {
-            aT =SE;
+            surr = N;
         }
 
-        return aT;
+        else if(xFinal == 0 && yFinal == - 1)
+        {
+            surr =W;
+        }
+
+        else if(xFinal == 0 && yFinal == 1)
+        {
+            surr =E;
+        }
+
+        else if(xFinal == 1 && yFinal == 0)
+        {
+            surr =S;
+        }
+
+        else if(xFinal == 1 && yFinal == - 1)
+        {
+            surr =SW;
+        }
+
+        else if(xFinal == 1 && yFinal == 1)
+        {
+            surr =SE;
+        }
+
+        else if(xFinal == 0 && yFinal == 0)
+        {
+            surr =STAY;
+        }
+
+        return surr;
     }
 
     bool Game::isLegal(const ActionType &ac, const Position &pos) const
     {
-        Surroundings strstr = getSurroundings(pos);
-        std::vector <ActionType> direction = {NW,N,NE,W,STAY,E,SW,S,SE};
+        std::vector <ActionType> direction = {NW,NE,N,W,E,S,SW,SE,STAY};
 
-        int goTo;
+        int dI;
         bool valid;
 
-        for (int i = 0; i < direction.size(); ++i)
+        for (int index = 0; index < direction.size(); ++index)
         {
-            if(direction[i]== ac)
+            if(direction[index]== ac)
             {
-                goTo = i;
+                dI = index;
                 break;
             }
         }
-        valid = strstr.array[goTo] != INACCESSIBLE;
+        valid = getSurroundings(pos).array[dI] != INACCESSIBLE;
 
         return valid;
 
@@ -435,113 +444,115 @@ PositionRandomizer Game::__posRandomizer;
 
     const Position Game::move(const Position &pos, const ActionType &ac) const
     {
-        Position posFinal;
 
-        if(ac == N)
-        {
-            posFinal = Position(pos.x - 1, pos.y);
-        }
+        Position nP;
 
-        else if(ac == NW)
+        if(ac == NW)
         {
-            posFinal = Position(pos.x - 1, pos.y - 1);
+            nP = Position(pos.x - 1, pos.y - 1);
         }
 
         else if(ac == NE)
         {
-            posFinal = Position(pos.x - 1, pos.y + 1);
+            nP = Position(pos.x - 1, pos.y + 1);
+        }
+
+        else if(ac == N)
+        {
+            nP = Position(pos.x - 1, pos.y);
         }
 
         else if(ac == W)
         {
-            posFinal = Position(pos.x, pos.y - 1);
-        }
-
-        else if(ac == STAY)
-        {
-            posFinal = Position(pos.x, pos.y);
-        }
-
-        else if(ac == SW)
-        {
-            posFinal = Position(pos.x + 1, pos.y - 1);
-        }
-
-        else if(ac == S)
-        {
-            posFinal = Position(pos.x + 1, pos.y);
+            nP = Position(pos.x, pos.y - 1);
         }
 
         else if(ac == E)
         {
-            posFinal = Position(pos.x, pos.y + 1);
+            nP = Position(pos.x, pos.y + 1);
+        }
+
+        else if(ac == S)
+        {
+            nP = Position(pos.x + 1, pos.y);
+        }
+
+        else if(ac == SW)
+        {
+            nP = Position(pos.x + 1, pos.y - 1);
         }
 
         else if(ac == SE)
         {
-            posFinal = Position(pos.x + 1, pos.y + 1);
+            nP = Position(pos.x + 1, pos.y + 1);
         }
 
-        return posFinal;
+        else if(ac == STAY)
+        {
+            nP = Position(pos.x, pos.y);
+        }
+
+        return nP;
     }
 
-
-    void Game::round() {
-
+    // Again
+    void Game::round()
+    {
         if(__round == 0 && __verbose)
         {
             __status = PLAYING;
             std::cout << std::endl << *this;
         }
 
-        for (int i = 0; i < __grid.size(); ++i)
+        for (int index = 0; index < __grid.size(); ++index)
         {
-            if(__grid[i]!= nullptr)
+            if(__grid[index]!= nullptr)
             {
-                if(__grid[i] -> isViable())
+
+                if(__grid[index]->isViable())
                 {
-                    if (! __grid[i] -> getTurned())
+
+                    if (! __grid[index]->getTurned())
                     {
-                        Agent * agent = dynamic_cast<Agent*>(__grid[i]);
+                        Agent * agent = dynamic_cast<Agent*>(__grid[index]);
 
                         if(agent)
                         {
-                            __grid[i]->setTurned(true);
+                            __grid[index]->setTurned(true);
 
-                            Position firstPos =
-                                    __grid[i]->getPosition();
+                            Position cP = __grid[index]->getPosition();
 
-                            Surroundings surr = getSurroundings(firstPos);
-
-                            ActionType aT = __grid[i]->takeTurn(surr);
+                            ActionType aT = __grid[index]->takeTurn(getSurroundings(cP));
 
                             if (aT != STAY)
                             {
-                                Position finalPos = move(firstPos, aT);
-                                int nP = (finalPos.x * __width + finalPos.y);
-                                (*__grid[i]) * (*__grid[nP]);
+                                Position newPos = move(cP, aT);
 
-                                if(! __grid[i]->isViable())
+                                int nP = (newPos.x * __width + newPos.y);
+                                (*__grid[index]) * (*__grid[nP]);
+
+                                if(! __grid[index]->isViable())
                                 {
-                                    delete __grid[i];
-                                    __grid[i]= nullptr;
+                                    delete __grid[index];
+                                    __grid[index]= nullptr;
                                 }
 
                                 else
                                 {
-                                    __grid[i]->setPosition(finalPos);
+                                    __grid[index]->setPosition(newPos);
 
                                     if (__grid[nP] != nullptr)
                                     {
                                         delete __grid[nP];
-                                        __grid[nP] = __grid[i];
-                                        __grid[i] = nullptr;
+
+                                        __grid[nP] = __grid[index];
+                                        __grid[index] = nullptr;
                                     }
 
                                     else
                                     {
-                                        __grid[nP] = __grid[i];
-                                        __grid[i] = nullptr;
+                                        __grid[nP] = __grid[index];
+                                        __grid[index] = nullptr;
                                     }
                                 }
 
@@ -561,12 +572,14 @@ PositionRandomizer Game::__posRandomizer;
         {
             if(__grid[i] != nullptr)
             {
+
                 if (!__grid[i]->isViable())
                 {
                     delete __grid[i];
-
                     __grid[i] = nullptr;
+                    //delete__drid[i]
                 }
+
                 else
                 {
                     __grid[i]->setTurned(false);
@@ -579,37 +592,36 @@ PositionRandomizer Game::__posRandomizer;
         {
             __status = OVER;
         }
+
         ++__round;
 
         if(__verbose)
         {
             std::cout << std::endl << *this;
         }
-
     }
 
-    // play game until over
     void Game::play(bool verbose)
     {
-        __verbose = verbose;
         round();
+        __verbose = verbose;
 
-        if(getNumPieces()>1 && getNumResources() > 0)
+        if(getNumPieces()> 1 && getNumResources() > 0)
         {
             play(verbose);
         }
     }
 
-
-std::ostream & Gaming::operator <<(std::ostream &os, const Game &game)
+    //Ostream
+    std::ostream & Gaming::operator<<(std::ostream &os, const Game &game)
     {
         os << "Round " << game.__round << std::endl;
 
-        for (int count = 0; count < game.__height; ++count)
+        for (int index = 0; index < game.__height; ++index)
         {
             for (int i = 0; i < game.__width; ++i)
             {
-                os << '[' << std::setw(5) << std::left << *game.__grid[i*game.__width+i] << ']';
+                os << '[' << *game.__grid[index*game.__width+i] << ']';
             }
 
             os << std::endl;
@@ -617,15 +629,18 @@ std::ostream & Gaming::operator <<(std::ostream &os, const Game &game)
 
         if(game.__status == Game::NOT_STARTED)
         {
-            os << "Not Started";
+            os << "Status: " << "Not Started" << std::endl;
         }
+
         else if(game.__status == Game::PLAYING)
         {
-            os << "Playing";
+            os << "Status: " << "Playing" << std::endl;
         }
+
         else
         {
-            os << "Over!";
+            os << "Status: " << "Over!" << std::endl;
         }
+
         return os;
-}
+    }

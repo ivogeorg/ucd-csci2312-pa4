@@ -23,7 +23,9 @@ using namespace Gaming;
     {
         stringstream ss;
         ss << FOOD_ID << __id;
+
         string s;
         getline(ss,s);
+
         os << s;
     }
