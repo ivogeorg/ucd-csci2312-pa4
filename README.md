@@ -5,6 +5,7 @@ _inheritance, polymorphism, board games, randomization_
 * * *
 
 Name: Hosna Zulali
+
 Class: CSCI 2312
 
-Test Passed: 144/153
+Test Passed: 142/153
